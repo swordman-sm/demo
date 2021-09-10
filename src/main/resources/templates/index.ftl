@@ -37,7 +37,7 @@
                                 <tr>
                                     <th name="host">主机地址</th>
                                     <th name="port">端口</th>
-                                    <th name="enable">启用</th>
+                                    <th name="enabled">启用</th>
                                     <th name="liveStatus">状态</th>
                                     <th name="startTime">启动时间</th>
                                     <th name="lastAliveTime">AliveTime</th>
@@ -64,11 +64,20 @@
     <@netCommon.commonFooter />
 </div>
 <@netCommon.commonScript />
+<!-- DataTables -->
+<script src="${request.contextPath}/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- moment -->
+<script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>
+<#-- cronGen -->
+<#--<script src="${request.contextPath}/static/plugins/cronGen/cronGen<#if I18n.admin_i18n?default('')?length gt 0 >_${I18n.admin_i18n}</#if>.js"></script>-->
+<#--<script src="${request.contextPath}/static/js/jobinfo.index.1.js"></script>-->
+<script src="${request.contextPath}/static/js/jobinfo.index.2.js"></script>
 <!-- daterangepicker -->
 <script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>
 <script src="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <#-- echarts -->
-<script src="${request.contextPath}/static/plugins/echarts/echarts.common.min.js"></script>
+<#--<script src="${request.contextPath}/static/plugins/echarts/echarts.common.min.js"></script>-->
 <script src="${request.contextPath}/static/js/index.js"></script>
 </body>
 </html>
