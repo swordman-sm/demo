@@ -38,7 +38,7 @@ $(function () {
     }, function (start, end, label) {
         freshChartDate(start, end);
     });
-    freshChartDate(rangesConf['最近一周'][0], rangesConf['最近一周'][1]);
+    // freshChartDate(rangesConf['最近一周'][0], rangesConf['最近一周'][1]);
 
     /**
      * fresh Chart Date

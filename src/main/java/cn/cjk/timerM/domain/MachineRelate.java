@@ -26,7 +26,7 @@ public class MachineRelate implements Serializable {
 
     private Integer liveStatus;
 
-    private Boolean enable;
+    private Boolean enabled;
 
     private String startTime;
 
@@ -40,12 +40,12 @@ public class MachineRelate implements Serializable {
         this.liveStatus = liveStatus;
     }
 
-    public Boolean getEnable() {
-        return enable;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    public void setEnable(Boolean enable) {
-        this.enable = enable;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Integer getMaxRetry() {
@@ -111,5 +111,21 @@ public class MachineRelate implements Serializable {
 
     public void setExecTimeout(Integer execTimeout) {
         this.execTimeout = execTimeout;
+    }
+
+    @Override
+    public String toString() {
+        return "MachineRelate{" +
+                "maxRetry=" + maxRetry +
+                ", maxQueueSize=" + maxQueueSize +
+                ", execTimeout=" + execTimeout +
+                ", alarmTimeout=" + alarmTimeout +
+                ", host='" + host + '\'' +
+                ", port='" + port + '\'' +
+                ", liveStatus=" + liveStatus +
+                ", enabled=" + enabled +
+                ", startTime='" + startTime + '\'' +
+                ", lastAliveTime='" + lastAliveTime + '\'' +
+                '}';
     }
 }

@@ -10,6 +10,8 @@ import cn.cjk.timerM.domain.MachineRelate;
  **/
 public class MachineRelateResponseVO extends MachineRelate {
 
+    private Integer id;
+
     private Long run;
 
     private Long queue;
@@ -18,7 +20,7 @@ public class MachineRelateResponseVO extends MachineRelate {
     }
 
     public MachineRelateResponseVO(MachineRelate machineRelate) {
-        this.setEnable(machineRelate.getEnable());
+        this.setEnabled(machineRelate.getEnabled());
         this.setLiveStatus(machineRelate.getLiveStatus());
         this.setAlarmTimeout(machineRelate.getAlarmTimeout());
         this.setExecTimeout(machineRelate.getExecTimeout());
@@ -28,6 +30,14 @@ public class MachineRelateResponseVO extends MachineRelate {
         this.setMaxQueueSize(machineRelate.getMaxQueueSize());
         this.setMaxRetry(machineRelate.getMaxRetry());
         this.setStartTime(machineRelate.getStartTime());
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Long getRun() {
@@ -44,5 +54,14 @@ public class MachineRelateResponseVO extends MachineRelate {
 
     public void setQueue(Long queue) {
         this.queue = queue;
+    }
+
+    @Override
+    public String toString() {
+        return "MachineRelateResponseVO{" +
+                "id=" + id +
+                ", run=" + run +
+                ", queue=" + queue +
+                "} " + super.toString();
     }
 }

@@ -10,11 +10,16 @@ $(function () {
             type: "post",
             data: function (d) {
                 var obj = {};
-                obj.jobGroup = $('#jobGroup').val();
-                obj.triggerStatus = $('#triggerStatus').val();
-                obj.jobDesc = $('#jobDesc').val();
-                obj.executorHandler = $('#executorHandler').val();
-                obj.author = $('#author').val();
+                obj.host = $('#host').val();
+                obj.port = $('#port').val();
+                obj.enabled = $('#enabled').val();
+                obj.liveStatus = $('#liveStatus').val();
+                obj.startTime = $('#startTime').val();
+                obj.lastAliveTime = $('#lastAliveTime').val();
+                obj.execTimeout = $('#execTimeout').val();
+                obj.alarmTimeout = $('#alarmTimeout').val();
+                obj.maxQueueSize = $('#maxQueueSize').val();
+                obj.maxRetry = $('#maxRetry').val();
                 obj.start = d.start;
                 obj.length = d.length;
                 return obj;
@@ -28,116 +33,91 @@ $(function () {
                 "data": 'id',
                 "bSortable": false,
                 "visible": true,
+                "width": '3%'
+            },
+            {
+                "data": 'host',
+                "visible": true,
                 "width": '7%'
             },
             {
-                "data": 'jobGroup',
-                "visible": false,
-                "render": function (data, type, row) {
-                    var groupMenu = $("#jobGroup").find("option");
-                    for (var index in $("#jobGroup").find("option")) {
-                        if ($(groupMenu[index]).attr('value') == data) {
-                            return $(groupMenu[index]).html();
-                        }
-                    }
-                    return data;
-                }
-            },
-            {
-                "data": 'jobDesc',
+                "data": 'port',
                 "visible": true,
-                "width": '25%'
+                "width": '5%'
             },
             {
-                "data": 'scheduleType',
+                "data": 'enabled',
                 "visible": true,
-                "width": '13%',
-                "render": function (data, type, row) {
-                    if (row.scheduleConf) {
-                        return row.scheduleType + '：' + row.scheduleConf;
-                    } else {
-                        return row.scheduleType;
-                    }
-                }
-            },
-            {
-                "data": 'glueType',
-                "width": '25%',
-                "visible": true,
-                "render": function (data, type, row) {
-                    var glueTypeTitle = findGlueTypeTitle(row.glueType);
-                    if (row.executorHandler) {
-                        return glueTypeTitle + "：" + row.executorHandler;
-                    } else {
-                        return glueTypeTitle;
-                    }
-                }
-            },
-            {"data": 'executorParam', "visible": false},
-            {
-                "data": 'addTime',
-                "visible": false,
-                "render": function (data, type, row) {
-                    return data ? moment(new Date(data)).format("YYYY-MM-DD HH:mm:ss") : "";
-                }
-            },
-            {
-                "data": 'updateTime',
-                "visible": false,
-                "render": function (data, type, row) {
-                    return data ? moment(new Date(data)).format("YYYY-MM-DD HH:mm:ss") : "";
-                }
-            },
-            {"data": 'author', "visible": true, "width": '10%'},
-            {"data": 'alarmEmail', "visible": false},
-            {
-                "data": 'triggerStatus',
-                "width": '10%',
-                "visible": true,
+                "width": '7%',
                 "render": function (data, type, row) {
                     // status
-                    if (1 == data) {
-                        return '<small class="label label-success" >RUNNING</small>';
+                    if (data) {
+                        return '<small class="label label-success" >ENABLE</small>';
                     } else {
-                        return '<small class="label label-default" >STOP</small>';
+                        return '<small class="label label-default" >DISABLE</small>';
                     }
                     return data;
                 }
+            },
+            {
+                "data": 'liveStatus',
+                "visible": true,
+                "width": '7%',
+                "render": function (data, type, row) {
+                    // status
+                    if (0 == data) {
+                        return '<small class="label label-success" >ALIVE</small>';
+                    } else {
+                        return '<small class="label label-default" >DEAD</small>';
+                    }
+                    return data;
+                }
+            },
+            {
+                "data": 'startTime',
+                "visible": true,
+                "width": '10%'
+            },
+            {
+                "data": 'lastAliveTime',
+                "visible": true,
+                "width": '10%'
+            },
+            {
+                "data": 'execTimeout',
+                "visible": true,
+                "width": '8%'
+            },
+            {
+                "data": 'alarmTimeout',
+                "visible": true,
+                "width": '8%'
+            },
+            {
+                "data": 'maxQueueSize',
+                "visible": true,
+                "width": '7%'
+            },
+            {
+                "data": 'maxRetry',
+                "visible": true,
+                "width": '7%'
             },
             {
                 "data": '操作',
                 "width": '10%',
                 "render": function (data, type, row) {
-                    console.log("tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")
                     return function () {
-
+                        // data
+                        // tableData['key' + row.id] = row;
+                        tableData[row.host + '_' + row.port] = row;
                         // status
                         var start_stop_div = "";
-                        if (1 == row.triggerStatus) {
-                            start_stop_div = '<li><a href="javascript:void(0);" class="job_operate" _type="job_pause" >' + '停止' + '</a></li>\n';
+                        if (row.enabled) {
+                            start_stop_div = '<li><a href="javascript:void(0);" class="job_operate" _type="disabled" >' + '禁用' + '</a></li>\n';
                         } else {
-                            start_stop_div = '<li><a href="javascript:void(0);" class="job_operate" _type="job_resume" >' + '启动' + '</a></li>\n';
+                            start_stop_div = '<li><a href="javascript:void(0);" class="job_operate" _type="enabled" >' + '启用' + '</a></li>\n';
                         }
-
-                        // job_next_time_html
-                        var job_next_time_html = '';
-                        if (row.scheduleType == 'CRON' || row.scheduleType == 'FIX_RATE') {
-                            job_next_time_html = '<li><a href="javascript:void(0);" class="job_next_time" >' + '下次执行时间' + '</a></li>\n';
-                        }
-
-                        // log url
-                        var logHref = base_url + '/joblog?jobId=' + row.id;
-
-                        // code url
-                        var codeBtn = "";
-                        if ('BEAN' != row.glueType) {
-                            var codeUrl = base_url + '/jobcode?jobId=' + row.id;
-                            codeBtn = '<li><a href="' + codeUrl + '" target="_blank" >GLUE IDE</a></li>\n';
-                            codeBtn += '<li class="divider"></li>\n';
-                        }
-
-                        // data
-                        tableData['key' + row.id] = row;
 
                         // opt
                         var html = '<div class="btn-group">\n' +
@@ -146,17 +126,10 @@ $(function () {
                             '       <span class="caret"></span>\n' +
                             '       <span class="sr-only">Toggle Dropdown</span>\n' +
                             '     </button>\n' +
-                            '     <ul class="dropdown-menu" role="menu" _id="' + row.id + '" >\n' +
-                            '       <li><a href="javascript:void(0);" class="job_trigger" >' + '执行一次' + '</a></li>\n' +
-                            '       <li><a href="' + logHref + '">' + '查询日志' + '</a></li>\n' +
-                            '       <li><a href="javascript:void(0);" class="job_registryinfo" >' + '注册节点' + '</a></li>\n' +
-                            job_next_time_html +
-                            '       <li class="divider"></li>\n' +
-                            codeBtn +
+                            '     <ul class="dropdown-menu" role="menu" _id="' + row.host + '_' + row.port + '" >\n' +
                             start_stop_div +
                             '       <li><a href="javascript:void(0);" class="update" >' + '编辑' + '</a></li>\n' +
-                            '       <li><a href="javascript:void(0);" class="job_operate" _type="job_del" >' + '删除' + '</a></li>\n' +
-                            '       <li><a href="javascript:void(0);" class="job_copy" >' + '复制' + '</a></li>\n' +
+                            '       <li><a href="javascript:void(0);" class="job_operate" _type="delete" >' + '删除' + '</a></li>\n' +
                             '     </ul>\n' +
                             '   </div>';
 
@@ -194,72 +167,58 @@ $(function () {
     // table data
     var tableData = {};
 
-    // // search btn
-    // $('#searchBtn').on('click', function () {
-    //     jobTable.fnDraw();
-    // });
-    //
-    // // jobGroup change
-    // $('#jobGroup').on('change', function () {
-    //     //reload
-    //     var jobGroup = $('#jobGroup').val();
-    //     window.location.href = base_url + "/jobinfo?jobGroup=" + jobGroup;
-    // });
-    //
-    // // job operate
-    // $("#job_list").on('click', '.job_operate', function () {
-    //     var typeName;
-    //     var url;
-    //     var needFresh = false;
-    //
-    //     var type = $(this).attr("_type");
-    //     if ("job_pause" == type) {
-    //         typeName = I18n.jobinfo_opt_stop;
-    //         url = base_url + "/jobinfo/stop";
-    //         needFresh = true;
-    //     } else if ("job_resume" == type) {
-    //         typeName = I18n.jobinfo_opt_start;
-    //         url = base_url + "/jobinfo/start";
-    //         needFresh = true;
-    //     } else if ("job_del" == type) {
-    //         typeName = I18n.system_opt_del;
-    //         url = base_url + "/jobinfo/remove";
-    //         needFresh = true;
-    //     } else {
-    //         return;
-    //     }
-    //
-    //     var id = $(this).parents('ul').attr("_id");
-    //
-    //     layer.confirm(I18n.system_ok + typeName + '?', {
-    //         icon: 3,
-    //         title: I18n.system_tips,
-    //         btn: [I18n.system_ok, I18n.system_cancel]
-    //     }, function (index) {
-    //         layer.close(index);
-    //
-    //         $.ajax({
-    //             type: 'POST',
-    //             url: url,
-    //             data: {
-    //                 "id": id
-    //             },
-    //             dataType: "json",
-    //             success: function (data) {
-    //                 if (data.code == 200) {
-    //                     layer.msg(typeName + I18n.system_success);
-    //                     if (needFresh) {
-    //                         //window.location.reload();
-    //                         jobTable.fnDraw(false);
-    //                     }
-    //                 } else {
-    //                     layer.msg(data.msg || typeName + I18n.system_fail);
-    //                 }
-    //             }
-    //         });
-    //     });
-    // });
-    //
+    // job operate
+    $("#job_list").on('click', '.job_operate', function () {
+        var typeName;
+        var url = base_url + "/hostinfo/setConfig";
+        var needFresh = false;
+
+        var type = $(this).attr("_type");
+        if ("disabled" == type) {
+            typeName = '禁用';
+            needFresh = true;
+        } else if ("enabled" == type) {
+            typeName = '启用';
+            needFresh = true;
+        } else if ("delete" == type) {
+            typeName = '删除';
+            needFresh = true;
+        } else {
+            return;
+        }
+
+        var id = $(this).parents('ul').attr("_id");
+
+        layer.confirm('确定' + typeName + '?', {
+            icon: 3,
+            title: '系统提示',
+            btn: ['确定', '取消']
+        }, function (index) {
+            layer.close(index);
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    "id": id,
+                    "type": type
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 200) {
+                        layer.msg(typeName + '成功');
+                        if (needFresh) {
+                            //window.location.reload();
+                            jobTable.fnDraw(false);
+                        }
+                    } else {
+                        layer.msg(data.msg || typeName + '失败');
+                    }
+                }
+            });
+        });
+    });
+
     // // job trigger
     // $("#job_list").on('click', '.job_trigger', function () {
     //     var id = $(this).parents('ul').attr("_id");
@@ -291,9 +250,9 @@ $(function () {
     //         }
     //     });
     // });
-    // $("#jobTriggerModal").on('hide.bs.modal', function () {
-    //     $("#jobTriggerModal .form")[0].reset();
-    // });
+    $("#jobTriggerModal").on('hide.bs.modal', function () {
+        $("#jobTriggerModal .form")[0].reset();
+    });
     //
     //
     // // job registryinfo
@@ -531,161 +490,215 @@ $(function () {
     //     }
     // });
     //
-    // // update
-    // $("#job_list").on('click', '.update', function () {
+    // update
+    $("#job_list").on('click', '.update', function () {
+
+        var id = $(this).parents('ul').attr("_id");
+        // var row = tableData['key' + id];
+        var row = tableData[id];
+        // fill base
+        $("#updateModal .form input[name='id']").val(id);
+        $("#updateModal .form input[name='host']").val(row.host).attr("readonly", "readonly")
+        $("#updateModal .form input[name='port']").val(row.port).attr("readonly", "readonly")
+        $("#updateModal .form input[name='enabled']").val(row.enabled ? "ENABLE" : "DISABLE").attr("readonly", "readonly")
+        $("#updateModal .form input[name='liveStatus']").val(row.liveStatus == 0 ? "ALIVE" : "DEAD").attr("readonly", "readonly")
+        $("#updateModal .form input[name='startTime']").val(row.startTime).attr("readonly", "readonly")
+        $("#updateModal .form input[name='lastAliveTime']").val(row.lastAliveTime).attr("readonly", "readonly")
+        $("#updateModal .form input[name='execTimeout']").val(row.execTimeout)
+        $("#updateModal .form input[name='alarmTimeout']").val(row.alarmTimeout)
+        $("#updateModal .form input[name='maxQueueSize']").val(row.maxQueueSize)
+        $("#updateModal .form input[name='maxRetry']").val(row.maxRetry)
+        // show
+        $('#updateModal').modal({backdrop: false, keyboard: false}).modal('show');
+    });
+
+    // $("#updateModal .form").on('click', ':submit', function () {
     //
-    //     var id = $(this).parents('ul').attr("_id");
-    //     var row = tableData['key' + id];
+    //     var host = $("#updateModal .form input[name='host']").val()
+    //     var port = $("#updateModal .form input[name='port']").val()
+    //     var enabled = $("#updateModal .form input[name='enabled']").val() == "ENABLE"
+    //     var liveStatus = $("#updateModal .form input[name='liveStatus']").val() == "ALIVE" ? 0 : 1
+    //     var startTime = $("#updateModal .form input[name='startTime']").val()
+    //     var lastAliveTime = $("#updateModal .form input[name='lastAliveTime']").val()
+    //     var execTimeout = $("#updateModal .form input[name='execTimeout']").val()
+    //     var alarmTimeout = $("#updateModal .form input[name='alarmTimeout']").val()
+    //     var maxQueueSize = $("#updateModal .form input[name='maxQueueSize']").val()
+    //     var maxRetry = $("#updateModal .form input[name='maxRetry']").val()
     //
-    //     // fill base
-    //     $("#updateModal .form input[name='id']").val(row.id);
-    //     $('#updateModal .form select[name=jobGroup] option[value=' + row.jobGroup + ']').prop('selected', true);
-    //     $("#updateModal .form input[name='jobDesc']").val(row.jobDesc);
-    //     $("#updateModal .form input[name='author']").val(row.author);
-    //     $("#updateModal .form input[name='alarmEmail']").val(row.alarmEmail);
+    //     layer.confirm('确定更新?', {
+    //         icon: 3,
+    //         title: '系统提示',
+    //         btn: ['确定', '取消']
+    //     }, function () {
     //
-    //     // fill trigger
-    //     $('#updateModal .form select[name=scheduleType] option[value=' + row.scheduleType + ']').prop('selected', true);
-    //     $("#updateModal .form input[name='scheduleConf']").val(row.scheduleConf);
-    //     if (row.scheduleType == 'CRON') {
-    //         $("#updateModal .form input[name='schedule_conf_CRON']").val(row.scheduleConf);
-    //     } else if (row.scheduleType == 'FIX_RATE') {
-    //         $("#updateModal .form input[name='schedule_conf_FIX_RATE']").val(row.scheduleConf);
-    //     } else if (row.scheduleType == 'FIX_DELAY') {
-    //         $("#updateModal .form input[name='schedule_conf_FIX_DELAY']").val(row.scheduleConf);
-    //     }
-    //
-    //     // 》init scheduleType
-    //     $("#updateModal .form select[name=scheduleType]").change();
-    //
-    //     // fill job
-    //     $('#updateModal .form select[name=glueType] option[value=' + row.glueType + ']').prop('selected', true);
-    //     $("#updateModal .form input[name='executorHandler']").val(row.executorHandler);
-    //     $("#updateModal .form textarea[name='executorParam']").val(row.executorParam);
-    //
-    //     // 》init glueType
-    //     $("#updateModal .form select[name=glueType]").change();
-    //
-    //     // 》init-cronGen
-    //     $("#updateModal .form input[name='schedule_conf_CRON']").show().siblings().remove();
-    //     $("#updateModal .form input[name='schedule_conf_CRON']").cronGen({});
-    //
-    //     // fill advanced
-    //     $('#updateModal .form select[name=executorRouteStrategy] option[value=' + row.executorRouteStrategy + ']').prop('selected', true);
-    //     $("#updateModal .form input[name='childJobId']").val(row.childJobId);
-    //     $('#updateModal .form select[name=misfireStrategy] option[value=' + row.misfireStrategy + ']').prop('selected', true);
-    //     $('#updateModal .form select[name=executorBlockStrategy] option[value=' + row.executorBlockStrategy + ']').prop('selected', true);
-    //     $("#updateModal .form input[name='executorTimeout']").val(row.executorTimeout);
-    //     $("#updateModal .form input[name='executorFailRetryCount']").val(row.executorFailRetryCount);
-    //
-    //     // show
-    //     $('#updateModal').modal({backdrop: false, keyboard: false}).modal('show');
-    // });
-    // var updateModalValidate = $("#updateModal .form").validate({
-    //     errorElement: 'span',
-    //     errorClass: 'help-block',
-    //     focusInvalid: true,
-    //
-    //     rules: {
-    //         jobDesc: {
-    //             required: true,
-    //             maxlength: 50
-    //         },
-    //         author: {
-    //             required: true
-    //         }
-    //     },
-    //     messages: {
-    //         jobDesc: {
-    //             required: I18n.system_please_input + I18n.jobinfo_field_jobdesc
-    //         },
-    //         author: {
-    //             required: I18n.system_please_input + I18n.jobinfo_field_author
-    //         }
-    //     },
-    //     highlight: function (element) {
-    //         $(element).closest('.form-group').addClass('has-error');
-    //     },
-    //     success: function (label) {
-    //         label.closest('.form-group').removeClass('has-error');
-    //         label.remove();
-    //     },
-    //     errorPlacement: function (error, element) {
-    //         element.parent('div').append(error);
-    //     },
-    //     submitHandler: function (form) {
-    //
-    //         // process executorTimeout + executorFailRetryCount
-    //         var executorTimeout = $("#updateModal .form input[name='executorTimeout']").val();
-    //         if (!/^\d+$/.test(executorTimeout)) {
-    //             executorTimeout = 0;
-    //         }
-    //         $("#updateModal .form input[name='executorTimeout']").val(executorTimeout);
-    //         var executorFailRetryCount = $("#updateModal .form input[name='executorFailRetryCount']").val();
-    //         if (!/^\d+$/.test(executorFailRetryCount)) {
-    //             executorFailRetryCount = 0;
-    //         }
-    //         $("#updateModal .form input[name='executorFailRetryCount']").val(executorFailRetryCount);
-    //
-    //
-    //         // process schedule_conf
-    //         var scheduleType = $("#updateModal .form select[name='scheduleType']").val();
-    //         var scheduleConf;
-    //         if (scheduleType == 'CRON') {
-    //             scheduleConf = $("#updateModal .form input[name='cronGen_display']").val();
-    //         } else if (scheduleType == 'FIX_RATE') {
-    //             scheduleConf = $("#updateModal .form input[name='schedule_conf_FIX_RATE']").val();
-    //         } else if (scheduleType == 'FIX_DELAY') {
-    //             scheduleConf = $("#updateModal .form input[name='schedule_conf_FIX_DELAY']").val();
-    //         }
-    //         $("#updateModal .form input[name='scheduleConf']").val(scheduleConf);
-    //
-    //         // post
-    //         $.post(base_url + "/jobinfo/update", $("#updateModal .form").serialize(), function (data, status) {
-    //             if (data.code == "200") {
-    //                 $('#updateModal').modal('hide');
-    //                 layer.open({
-    //                     title: I18n.system_tips,
-    //                     btn: [I18n.system_ok],
-    //                     content: I18n.system_update_suc,
-    //                     icon: '1',
-    //                     end: function (layero, index) {
-    //                         //window.location.reload();
-    //                         jobTable.fnDraw();
-    //                     }
-    //                 });
-    //             } else {
-    //                 layer.open({
-    //                     title: I18n.system_tips,
-    //                     btn: [I18n.system_ok],
-    //                     content: (data.msg || I18n.system_update_fail),
-    //                     icon: '2'
-    //                 });
+    //         $.ajax({
+    //             type: 'POST',
+    //             url: base_url + "/jobinfo/update",
+    //             data: {
+    //                 "host": host,
+    //                 "port": port,
+    //                 "enabled": enabled,
+    //                 "liveStatus": liveStatus,
+    //                 "startTime": startTime,
+    //                 "lastAliveTime": lastAliveTime,
+    //                 "execTimeout": execTimeout,
+    //                 "alarmTimeout": alarmTimeout,
+    //                 "maxQueueSize": maxQueueSize,
+    //                 "maxRetry": maxRetry
+    //             },
+    //             dataType: "json",
+    //             success: function (data) {
+    //                 console.log("====================================================")
+    //                 if (data.code == 200) {
+    //                     layer.msg('更新成功');
+    //                     // if (needFresh) {
+    //                     //     //window.location.reload();
+    //                     //     // jobTable.fnDraw(false);
+    //                     // }
+    //                 } else {
+    //                     layer.msg(data.msg || '更新失败');
+    //                 }
     //             }
     //         });
-    //     }
+    //     });
+    //
+    //     // post
+    //     // $.post(base_url + "/jobinfo/update", $("#updateModal .form").serialize(), function (data, status) {
+    //     //     console.log("data")
+    //     //     console.log(data)
+    //     //     if (data.code == "200") {
+    //     //         // $('#updateModal').modal('hide');
+    //     //         layer.open({
+    //     //             title: '系统提示',
+    //     //             btn: ['确定'],
+    //     //             content: '更新成功',
+    //     //             icon: '1',
+    //     //             end: function (layero, index) {
+    //     //                 //window.location.reload();
+    //     //                 // jobTable.fnDraw();
+    //     //             }
+    //     //         });
+    //     //     } else {
+    //     //         layer.open({
+    //     //             title: '系统提示',
+    //     //             btn: ['确定'],
+    //     //             content: (data.msg || '更新失败'),
+    //     //             icon: '2'
+    //     //         });
+    //     //     }
+    //     // });
+    //
+    //
     // });
+
+    var updateModalValidate = $("#updateModal .form").validate({
+        errorElement: 'span',
+        errorClass: 'help-block',
+        focusInvalid: true,
+
+        // rules: {
+        //     jobDesc: {
+        //         required: true,
+        //         maxlength: 50
+        //     },
+        //     author: {
+        //         required: true
+        //     }
+        // },
+        // messages: {
+        //     jobDesc: {
+        //         required: '请输入任务描述'
+        //     },
+        //     author: {
+        //         required: '请输入负责人'
+        //     }
+        // },
+
+        submitHandler: function (form) {
+
+            // process executorTimeout + executorFailRetryCount
+            // var executorTimeout = $("#updateModal .form input[name='executorTimeout']").val();
+            // if (!/^\d+$/.test(executorTimeout)) {
+            //     executorTimeout = 0;
+            // }
+            // $("#updateModal .form input[name='executorTimeout']").val(executorTimeout);
+            // var executorFailRetryCount = $("#updateModal .form input[name='executorFailRetryCount']").val();
+            // if (!/^\d+$/.test(executorFailRetryCount)) {
+            //     executorFailRetryCount = 0;
+            // }
+            // $("#updateModal .form input[name='executorFailRetryCount']").val(executorFailRetryCount);
+            //
+            //
+            // // process schedule_conf
+            // var scheduleType = $("#updateModal .form select[name='scheduleType']").val();
+            // var scheduleConf;
+            // if (scheduleType == 'CRON') {
+            //     scheduleConf = $("#updateModal .form input[name='cronGen_display']").val();
+            // } else if (scheduleType == 'FIX_RATE') {
+            //     scheduleConf = $("#updateModal .form input[name='schedule_conf_FIX_RATE']").val();
+            // } else if (scheduleType == 'FIX_DELAY') {
+            //     scheduleConf = $("#updateModal .form input[name='schedule_conf_FIX_DELAY']").val();
+            // }
+            // $("#updateModal .form input[name='scheduleConf']").val(scheduleConf);
+
+            // var host = $("#updateModal .form input[name='host']").val()
+            // var port = $("#updateModal .form input[name='port']").val()
+            $("#updateModal .form input[name='enabled']").val($("#updateModal .form input[name='enabled']").val() == "ENABLE")
+            $("#updateModal .form input[name='liveStatus']").val($("#updateModal .form input[name='liveStatus']").val() == "ALIVE" ? 0 : 1)
+            // var startTime = $("#updateModal .form input[name='startTime']").val()
+            // var lastAliveTime = $("#updateModal .form input[name='lastAliveTime']").val()
+            // var execTimeout = $("#updateModal .form input[name='execTimeout']").val()
+            // var alarmTimeout = $("#updateModal .form input[name='alarmTimeout']").val()
+            // var maxQueueSize = $("#updateModal .form input[name='maxQueueSize']").val()
+            // var maxRetry = $("#updateModal .form input[name='maxRetry']").val()
+            // var param = $("#updateModal .form").serialize();
+            // post
+            $.post(base_url + "/hostinfo/update", $("#updateModal .form").serialize(), function (data, status) {
+                if (data.code == "200") {
+                    $('#updateModal').modal('hide');
+                    layer.open({
+                        title: '系统提示',
+                        btn: ['确定'],
+                        content: '更新成功',
+                        icon: '1',
+                        end: function (layero, index) {
+                            //window.location.reload();
+                            jobTable.fnDraw();
+                        }
+                    });
+                } else {
+                    layer.open({
+                        title: '系统提示',
+                        btn: ['确定'],
+                        content: (data.msg || '更新失败'),
+                        icon: '2'
+                    });
+                }
+            });
+        }
+    });
     // $("#updateModal").on('hide.bs.modal', function () {
     //     updateModalValidate.resetForm();
     //     $("#updateModal .form")[0].reset();
     //     $("#updateModal .form .form-group").removeClass("has-error");
     // });
-    //
-    // /**
-    //  * find title by name, GlueType
-    //  */
-    // function findGlueTypeTitle(glueType) {
-    //     var glueTypeTitle;
-    //     $("#addModal .form select[name=glueType] option").each(function () {
-    //         var name = $(this).val();
-    //         var title = $(this).text();
-    //         if (glueType == name) {
-    //             glueTypeTitle = title;
-    //             return false
-    //         }
-    //     });
-    //     return glueTypeTitle;
-    // }
+
+    /**
+     * find title by name, GlueType
+     */
+    function findGlueTypeTitle(glueType) {
+        var glueTypeTitle;
+        $("#addModal .form select[name=glueType] option").each(function () {
+            var name = $(this).val();
+            var title = $(this).text();
+            if (glueType == name) {
+                glueTypeTitle = title;
+                return false
+            }
+        });
+        return glueTypeTitle;
+    }
+
     //
     // // job_copy
     // $("#job_list").on('click', '.job_copy', function () {

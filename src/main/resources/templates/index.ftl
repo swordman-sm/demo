@@ -35,16 +35,16 @@
                             <table id="job_list" class="table table-bordered table-striped" width="100%">
                                 <thead>
                                 <tr>
+                                    <th name="id">ID</th>
                                     <th name="host">主机地址</th>
                                     <th name="port">端口</th>
                                     <th name="enabled">启用</th>
                                     <th name="liveStatus">状态</th>
                                     <th name="startTime">启动时间</th>
                                     <th name="lastAliveTime">AliveTime</th>
-                                    <th name="execTimeout">执行超时间隔</th>
-                                    <th name="alarmTimeout">报警时间间隔</th>
+                                    <th name="execTimeout">执行超时间隔(min)</th>
+                                    <th name="alarmTimeout">报警时间间隔(min)</th>
                                     <th name="maxQueueSize">最大任务队列</th>
-                                    <th name="autoRetry">自动重试</th>
                                     <th name="maxRetry">最大重试次数</th>
                                     <th>操作</th>
                                 </tr>
@@ -58,6 +58,165 @@
             </div>
         </section>
     </div>
+
+
+    <!-- 更新.模态框 -->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">更新节点配置信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal form" role="form">
+
+                        <p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">
+                            主机信息</p> <#-- 基础信息 -->
+                        <#--                        <div class="form-group">-->
+                        <#--                            <label for="firstname" class="col-sm-2 control-label">执行器<font color="red">*</font></label>-->
+                        <#--                            <div class="col-sm-4">-->
+                        <#--                                <select class="form-control" name="jobGroup">-->
+                        <#--                                    &lt;#&ndash;                                    <#list JobGroupList as group>&ndash;&gt;-->
+                        <#--                                    &lt;#&ndash;                                        <option value="${group.id}">${group.title}</option>&ndash;&gt;-->
+                        <#--                                    &lt;#&ndash;                                    </#list>&ndash;&gt;-->
+                        <#--                                </select>-->
+                        <#--                            </div>-->
+
+                        <#--                            <label for="lastname" class="col-sm-2 control-label">任务描述<font color="red">*</font></label>-->
+                        <#--                            <div class="col-sm-4"><input type="text" class="form-control" name="jobDesc"-->
+                        <#--                                                         placeholder="请输入任务描述" maxlength="50"></div>-->
+                        <#--                        </div>-->
+
+                        <div class="form-group">
+                            <label for="firstname" class="col-sm-2 control-label">主机地址</label>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="host" maxlength="100">
+                            </div>
+
+                            <label for="lastname" class="col-sm-2 control-label">端口</label>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="port" maxlength="50">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-2 control-label">启用</label>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="enabled"
+                                                         placeholder="启用" maxlength="50"></div>
+                            <label for="lastname" class="col-sm-2 control-label">状态</label>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="liveStatus"
+                                                         placeholder="状态" maxlength="100"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-2 control-label">启动时间</label>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="startTime"
+                                                         placeholder="启动时间" maxlength="50"></div>
+                            <label for="lastname" class="col-sm-2 control-label">AliveTime</label>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="lastAliveTime"
+                                                         placeholder="AliveTime" maxlength="100"></div>
+                        </div>
+
+                        <br>
+                        <p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">
+                            超时配置</p> <#-- 调度配置 -->
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-2 control-label">执行超时间隔(min)<font
+                                        color="red">*</font></label>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="execTimeout"
+                                                         placeholder="执行超时间隔(min)" maxlength="50"></div>
+                            <label for="lastname" class="col-sm-2 control-label">报警时间间隔(min)<font
+                                        color="black">*</font></label>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="alarmTimeout"
+                                                         placeholder="报警时间间隔(min)" maxlength="100"></div>
+                        </div>
+
+                        <br>
+                        <p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">
+                            其他参数</p> <#-- 任务配置 -->
+
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-2 control-label">最大任务队列<font
+                                        color="red">*</font></label>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="maxQueueSize"
+                                                         placeholder="最大任务队列" maxlength="50"></div>
+                            <label for="lastname" class="col-sm-2 control-label">最大重试次数<font
+                                        color="black">*</font></label>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="maxRetry"
+                                                         placeholder="最大重试次数" maxlength="100"></div>
+                        </div>
+
+                        <#--                        <p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">-->
+                        <#--                            高级配置</p> &lt;#&ndash; 高级配置 &ndash;&gt;-->
+
+                        <#--                        <div class="form-group">-->
+                        <#--                            <label for="firstname" class="col-sm-2 control-label">路由策略<font color="red">*</font></label>-->
+                        <#--                            <div class="col-sm-4">-->
+                        <#--                                <select class="form-control" name="executorRouteStrategy">-->
+                        <#--                                    &lt;#&ndash;                                    <#list ExecutorRouteStrategyEnum as item>&ndash;&gt;-->
+                        <#--                                    &lt;#&ndash;                                        <option value="${item}">${item.title}</option>&ndash;&gt;-->
+                        <#--                                    &lt;#&ndash;                                    </#list>&ndash;&gt;-->
+                        <#--                                </select>-->
+                        <#--                            </div>-->
+
+                        <#--                            <label for="lastname" class="col-sm-2 control-label">子任务ID<font-->
+                        <#--                                        color="black">*</font></label>-->
+                        <#--                            <div class="col-sm-4"><input type="text" class="form-control" name="childJobId"-->
+                        <#--                                                         placeholder="请输入子任务的任务ID,如存在多个则逗号分隔" maxlength="100"></div>-->
+                        <#--                        </div>-->
+
+                        <#--                        <div class="form-group">-->
+                        <#--                            <label for="firstname" class="col-sm-2 control-label">调度过期策略<font-->
+                        <#--                                        color="black">*</font></label>-->
+                        <#--                            <div class="col-sm-4">-->
+                        <#--                                <select class="form-control" name="misfireStrategy">-->
+                        <#--                                    &lt;#&ndash;                                    <#list MisfireStrategyEnum as item>&ndash;&gt;-->
+                        <#--                                    &lt;#&ndash;                                        <option value="${item}"&ndash;&gt;-->
+                        <#--                                    &lt;#&ndash;                                                <#if 'DO_NOTHING' == item >selected</#if> >${item.title}</option>&ndash;&gt;-->
+                        <#--                                    &lt;#&ndash;                                    </#list>&ndash;&gt;-->
+                        <#--                                </select>-->
+                        <#--                            </div>-->
+
+                        <#--                            <label for="firstname" class="col-sm-2 control-label">阻塞处理策略<font-->
+                        <#--                                        color="red">*</font></label>-->
+                        <#--                            <div class="col-sm-4">-->
+                        <#--                                <select class="form-control" name="executorBlockStrategy">-->
+                        <#--                                    &lt;#&ndash;                                    <#list ExecutorBlockStrategyEnum as item>&ndash;&gt;-->
+                        <#--                                    &lt;#&ndash;                                        <option value="${item}">${item.title}</option>&ndash;&gt;-->
+                        <#--                                    &lt;#&ndash;                                    </#list>&ndash;&gt;-->
+                        <#--                                </select>-->
+                        <#--                            </div>-->
+                        <#--                        </div>-->
+
+                        <#--                        <div class="form-group">-->
+                        <#--                            <label for="lastname" class="col-sm-2 control-label">任务超时时间<font-->
+                        <#--                                        color="black">*</font></label>-->
+                        <#--                            <div class="col-sm-4"><input type="text" class="form-control" name="executorTimeout"-->
+                        <#--                                                         placeholder="任务超时时间，单位秒，大于零时生效" maxlength="6"-->
+                        <#--                                                         onkeyup="this.value=this.value.replace(/\D/g,'')"-->
+                        <#--                                                         onafterpaste="this.value=this.value.replace(/\D/g,'')"></div>-->
+                        <#--                            <label for="lastname" class="col-sm-2 control-label">失败重试次数<font-->
+                        <#--                                        color="black">*</font></label>-->
+                        <#--                            <div class="col-sm-4"><input type="text" class="form-control" name="executorFailRetryCount"-->
+                        <#--                                                         placeholder="失败重试次数，大于零时生效" maxlength="4"-->
+                        <#--                                                         onkeyup="this.value=this.value.replace(/\D/g,'')"-->
+                        <#--                                                         onafterpaste="this.value=this.value.replace(/\D/g,'')"></div>-->
+                        <#--                        </div>-->
+
+                        <hr>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-6">
+                                <button type="submit" class="btn btn-primary">保存</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                <input type="hidden" name="id">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- /.content-wrapper -->
 
     <!-- footer -->
