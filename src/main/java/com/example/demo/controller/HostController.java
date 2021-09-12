@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
 import cn.cjk.timerM.domain.MachineRelate;
+import cn.cjk.timerM.domain.TaskEntity;
 import com.example.demo.model.MachineRelateResponseVO;
 import com.example.demo.model.ReturnT;
-import com.example.demo.model.TaskEntity;
 import com.example.demo.model.ThreadConstant;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -58,6 +58,8 @@ public class HostController {
             machineRelateList.add(machineRelateResponseVO);
             id++;
         }
+        maps.put("recordsTotal", configMap.size());
+        maps.put("recordsFiltered", configMap.size());
         maps.put("data", machineRelateList);
         System.err.println(machineRelateList);
         return maps;

@@ -71,7 +71,7 @@
     <header class="main-header">
         <a href="${request.contextPath}/" class="logo">
             <span class="logo-mini"><b>XXL</b></span>
-            <span class="logo-lg"><b>任务调度中心</b></span>
+            <span class="logo-lg"><b>Dtimer调度中心</b></span>
         </a>
         <nav class="navbar navbar-static-top" role="navigation">
 
@@ -245,12 +245,12 @@
 
 <#macro commonFooter >
     <footer class="main-footer">
-        Powered by <b>XXL-JOB</b> 2.3.1-SNAPSHOT
+        Powered by <b>DTIMER-DAY</b> 2.3.1-SNAPSHOT
         <div class="pull-right hidden-xs">
-            <strong>Copyright &copy; 2015-${.now?string('yyyy')} &nbsp;
-                <a href="https://www.xuxueli.com/" target="_blank">xuxueli</a>
+            <strong>Copyright &copy; 2021-${.now?string('yyyy')} &nbsp;
+                <a href="https://a.cunjk.com/" target="_blank">Modify By Timer</a>
                 &nbsp;
-                <a href="https://github.com/xuxueli/xxl-job" target="_blank">github</a>
+                <a href="https://a.cunjk.com/dtimer" target="_blank">github</a>
             </strong><!-- All rights reserved. -->
         </div>
     </footer>

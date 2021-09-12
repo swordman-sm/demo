@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package cn.cjk.timerM.domain;
 
 import java.io.Serializable;
 
@@ -6,7 +6,9 @@ public class TaskEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String taskId;
+    private Integer id;
+
+    private String taskId;
 
     private String dpId;
 
@@ -22,6 +24,8 @@ public class TaskEntity implements Serializable {
 
     private Integer status;
 
+    private Boolean autoRetry;
+
     private String remark;
 
     private String extendPara;
@@ -32,12 +36,28 @@ public class TaskEntity implements Serializable {
 
     private int retry = 0;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getHost() {
         return host;
     }
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public Boolean getAutoRetry() {
+        return autoRetry;
+    }
+
+    public void setAutoRetry(Boolean autoRetry) {
+        this.autoRetry = autoRetry;
     }
 
     public String getPort() {

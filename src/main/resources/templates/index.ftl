@@ -6,7 +6,7 @@
     <!-- daterangepicker -->
     <link rel="stylesheet"
           href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
-    <title>调度中心</title>
+    <title>Dtimer-Day调度中心</title>
 </head>
 <body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxljob_adminlte_settings"]?exists && "off" == cookieMap["xxljob_adminlte_settings"].value >sidebar-collapse</#if> ">
 <div class="wrapper">
@@ -42,10 +42,12 @@
                                     <th name="liveStatus">状态</th>
                                     <th name="startTime">启动时间</th>
                                     <th name="lastAliveTime">AliveTime</th>
-                                    <th name="execTimeout">执行超时间隔(min)</th>
-                                    <th name="alarmTimeout">报警时间间隔(min)</th>
+                                    <th name="execTimeout">ExecTimeout(min)</th>
+                                    <th name="alarmTimeout">AlarmTimeout(min)</th>
                                     <th name="maxQueueSize">最大任务队列</th>
                                     <th name="maxRetry">最大重试次数</th>
+                                    <th name="queue">Queue</th>
+                                    <th name="run">Run</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -71,21 +73,7 @@
                     <form class="form-horizontal form" role="form">
 
                         <p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">
-                            主机信息</p> <#-- 基础信息 -->
-                        <#--                        <div class="form-group">-->
-                        <#--                            <label for="firstname" class="col-sm-2 control-label">执行器<font color="red">*</font></label>-->
-                        <#--                            <div class="col-sm-4">-->
-                        <#--                                <select class="form-control" name="jobGroup">-->
-                        <#--                                    &lt;#&ndash;                                    <#list JobGroupList as group>&ndash;&gt;-->
-                        <#--                                    &lt;#&ndash;                                        <option value="${group.id}">${group.title}</option>&ndash;&gt;-->
-                        <#--                                    &lt;#&ndash;                                    </#list>&ndash;&gt;-->
-                        <#--                                </select>-->
-                        <#--                            </div>-->
-
-                        <#--                            <label for="lastname" class="col-sm-2 control-label">任务描述<font color="red">*</font></label>-->
-                        <#--                            <div class="col-sm-4"><input type="text" class="form-control" name="jobDesc"-->
-                        <#--                                                         placeholder="请输入任务描述" maxlength="50"></div>-->
-                        <#--                        </div>-->
+                            主机信息</p>
 
                         <div class="form-group">
                             <label for="firstname" class="col-sm-2 control-label">主机地址</label>
@@ -144,63 +132,6 @@
                                                          placeholder="最大重试次数" maxlength="100"></div>
                         </div>
 
-                        <#--                        <p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">-->
-                        <#--                            高级配置</p> &lt;#&ndash; 高级配置 &ndash;&gt;-->
-
-                        <#--                        <div class="form-group">-->
-                        <#--                            <label for="firstname" class="col-sm-2 control-label">路由策略<font color="red">*</font></label>-->
-                        <#--                            <div class="col-sm-4">-->
-                        <#--                                <select class="form-control" name="executorRouteStrategy">-->
-                        <#--                                    &lt;#&ndash;                                    <#list ExecutorRouteStrategyEnum as item>&ndash;&gt;-->
-                        <#--                                    &lt;#&ndash;                                        <option value="${item}">${item.title}</option>&ndash;&gt;-->
-                        <#--                                    &lt;#&ndash;                                    </#list>&ndash;&gt;-->
-                        <#--                                </select>-->
-                        <#--                            </div>-->
-
-                        <#--                            <label for="lastname" class="col-sm-2 control-label">子任务ID<font-->
-                        <#--                                        color="black">*</font></label>-->
-                        <#--                            <div class="col-sm-4"><input type="text" class="form-control" name="childJobId"-->
-                        <#--                                                         placeholder="请输入子任务的任务ID,如存在多个则逗号分隔" maxlength="100"></div>-->
-                        <#--                        </div>-->
-
-                        <#--                        <div class="form-group">-->
-                        <#--                            <label for="firstname" class="col-sm-2 control-label">调度过期策略<font-->
-                        <#--                                        color="black">*</font></label>-->
-                        <#--                            <div class="col-sm-4">-->
-                        <#--                                <select class="form-control" name="misfireStrategy">-->
-                        <#--                                    &lt;#&ndash;                                    <#list MisfireStrategyEnum as item>&ndash;&gt;-->
-                        <#--                                    &lt;#&ndash;                                        <option value="${item}"&ndash;&gt;-->
-                        <#--                                    &lt;#&ndash;                                                <#if 'DO_NOTHING' == item >selected</#if> >${item.title}</option>&ndash;&gt;-->
-                        <#--                                    &lt;#&ndash;                                    </#list>&ndash;&gt;-->
-                        <#--                                </select>-->
-                        <#--                            </div>-->
-
-                        <#--                            <label for="firstname" class="col-sm-2 control-label">阻塞处理策略<font-->
-                        <#--                                        color="red">*</font></label>-->
-                        <#--                            <div class="col-sm-4">-->
-                        <#--                                <select class="form-control" name="executorBlockStrategy">-->
-                        <#--                                    &lt;#&ndash;                                    <#list ExecutorBlockStrategyEnum as item>&ndash;&gt;-->
-                        <#--                                    &lt;#&ndash;                                        <option value="${item}">${item.title}</option>&ndash;&gt;-->
-                        <#--                                    &lt;#&ndash;                                    </#list>&ndash;&gt;-->
-                        <#--                                </select>-->
-                        <#--                            </div>-->
-                        <#--                        </div>-->
-
-                        <#--                        <div class="form-group">-->
-                        <#--                            <label for="lastname" class="col-sm-2 control-label">任务超时时间<font-->
-                        <#--                                        color="black">*</font></label>-->
-                        <#--                            <div class="col-sm-4"><input type="text" class="form-control" name="executorTimeout"-->
-                        <#--                                                         placeholder="任务超时时间，单位秒，大于零时生效" maxlength="6"-->
-                        <#--                                                         onkeyup="this.value=this.value.replace(/\D/g,'')"-->
-                        <#--                                                         onafterpaste="this.value=this.value.replace(/\D/g,'')"></div>-->
-                        <#--                            <label for="lastname" class="col-sm-2 control-label">失败重试次数<font-->
-                        <#--                                        color="black">*</font></label>-->
-                        <#--                            <div class="col-sm-4"><input type="text" class="form-control" name="executorFailRetryCount"-->
-                        <#--                                                         placeholder="失败重试次数，大于零时生效" maxlength="4"-->
-                        <#--                                                         onkeyup="this.value=this.value.replace(/\D/g,'')"-->
-                        <#--                                                         onafterpaste="this.value=this.value.replace(/\D/g,'')"></div>-->
-                        <#--                        </div>-->
-
                         <hr>
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-6">
@@ -227,7 +158,7 @@
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- moment -->
-<script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>
+<#--<script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>-->
 <#-- cronGen -->
 <#--<script src="${request.contextPath}/static/plugins/cronGen/cronGen<#if I18n.admin_i18n?default('')?length gt 0 >_${I18n.admin_i18n}</#if>.js"></script>-->
 <#--<script src="${request.contextPath}/static/js/jobinfo.index.1.js"></script>-->
