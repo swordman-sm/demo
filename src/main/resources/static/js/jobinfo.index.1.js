@@ -1,16 +1,18 @@
 $(function () {
 
-    // var jstat = $("#jobStatus option:selected").val()
-
+    var jstat = $("#jobStatus").val()
+    console.log("jstat===" + jstat)
+    var url = base_url + "/jobinfo/" + jstat
     // init date tables
     var jobTable = $("#job_list").dataTable({
         "deferRender": true,
         "processing": true,
         "serverSide": true,
         "ajax": {
-            url: base_url + "/jobinfo/" + 'stop',
+            url: url,
             type: "post",
             data: function (d) {
+                console.log(url)
                 var obj = {};
                 obj.taskId = $('#taskId').val();
                 obj.dpId = $('#dpId').val();
@@ -202,6 +204,18 @@ $(function () {
 
     // table data
     var tableData = {};
+
+
+    // jobGroup change
+    $('#jobStatus').on('change', function () {
+        //reload
+        var jobStatus = $('#jobStatus').val();
+        // var jstat = $("#jobStatus option:selected").val()
+        // console.log(jstat)
+        // window.location.href = base_url + "/jobinfo/" + jobStatus;
+        url = base_url + "/jobinfo/" + jobStatus
+        jobTable.fnDraw(false);
+    });
 
     // // search btn
     // $('#searchBtn').on('click', function () {
@@ -606,10 +620,11 @@ $(function () {
                     "date": row.date,
                     "taskId": row.taskId,
                     "dpId": row.dpId,
+                    "priority": row.priority,
                     "extendPara": row.extendPara,
                     "token": row.token,
                     "autoRetry": row.autoRetry,
-                    "retry": row.retry
+                    "retry": 0
                 },
                 dataType: "json",
                 success: function (data) {

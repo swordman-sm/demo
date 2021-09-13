@@ -74,7 +74,6 @@ public class HostController {
     @PostMapping("/setConfig")
     @ResponseBody
     public ReturnT<String> setConfig(String id, String type) {
-        System.err.println(id + "===========" + type);
         ReturnT<String> result = ReturnT.FAIL;
         if (!StringUtils.hasLength(id) || !StringUtils.hasLength(type)) {
             result.setMsg("id or type is null");

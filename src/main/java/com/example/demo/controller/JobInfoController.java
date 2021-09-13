@@ -34,32 +34,42 @@ public class JobInfoController {
     //查看已进入wait队列数据
     @RequestMapping("/wait")
     @ResponseBody
-    public List<TaskEntity> waits(String taskId, String dpId, Integer pageSize, Integer pageNum) {
+    public Map<String, Object> waits(String taskId, String dpId, Integer start, Integer length) {
         System.err.println("8888888888888888888888888888888");
+        taskId = taskId.trim();
+        dpId = dpId.trim();
+        Map<String, Object> maps = new HashMap<>();
         ListOperations<String, TaskEntity> listOperations = redisTemplate.opsForList();
         List<TaskEntity> taskEntities = listOperations.range(ThreadConstant.TASK_WAIT_KEY, 0, -1);
-        List<TaskEntity> taskList = getTaskList(taskEntities, taskId, dpId, pageSize, pageNum, taskEntities.size(), "");
-        System.err.println(taskList);
-        return taskList;
+        List<TaskEntity> taskList = new ArrayList<>();
+
+        return getTaskMap(taskList, maps, taskEntities, taskId, dpId, start, length);
     }
 
     //查看已进入线程池的BlockingQueue数据
     @RequestMapping("/queue")
     @ResponseBody
-    public List<TaskEntity> queue(String taskId, String dpId, Integer pageSize, Integer pageNum) {
-
+    public Map<String, Object> queue(String taskId, String dpId, Integer start, Integer length) {
+        System.err.println(taskId);
+        System.err.println(dpId);
+        System.err.println(start);
+        System.err.println(length);
+        Map<String, Object> maps = new HashMap<>();
         HashOperations<String, String, TaskEntity> hashOperations = redisTemplate.opsForHash();
         Map<String, TaskEntity> taskEntityMap = hashOperations.entries(ThreadConstant.TASK_QUEUE_KEY);
-        return getTaskList(taskEntityMap.values(), taskId, dpId, pageSize, pageNum, taskEntityMap.size(), "");
+        List<TaskEntity> taskList = new ArrayList<>();
+        return getTaskMap(taskList, maps, taskEntityMap.values(), taskId, dpId, start, length);
     }
 
     //查看正在线程池核心线程执行的数据
     @RequestMapping("/run")
     @ResponseBody
-    public List<TaskEntity> run(String taskId, String dpId, Integer pageSize, Integer pageNum) {
+    public Map<String, Object> run(String taskId, String dpId, Integer start, Integer length) {
+        Map<String, Object> maps = new HashMap<>();
         HashOperations<String, String, TaskEntity> hashOperations = redisTemplate.opsForHash();
         Map<String, TaskEntity> taskEntityMap = hashOperations.entries(ThreadConstant.TASK_RUN_KEY);
-        return getTaskList(taskEntityMap.values(), taskId, dpId, pageSize, pageNum, taskEntityMap.size(), "");
+        List<TaskEntity> taskList = new ArrayList<>();
+        return getTaskMap(taskList, maps, taskEntityMap.values(), taskId, dpId, start, length);
     }
 
     //查看停止状态数据
@@ -118,7 +128,7 @@ public class JobInfoController {
         taskEntity.setRemark(TaskStatusEnum.WAIT.getStatus());
         taskEntity.setCreateTime(DateUtil.nowDateForStrYMDHMS());
         taskEntity.setUpdateTime(null);
-
+        System.err.println(taskEntity.getPriority());
         String hashKey = taskEntity.getDate() + "_" + taskEntity.getTaskId() + "_" + taskEntity.getDpId();
 
         Long delete = redisTemplate.opsForHash().delete(ThreadConstant.TASK_STOP_KEY, hashKey);
@@ -133,41 +143,65 @@ public class JobInfoController {
     }
 
 
-    public List<TaskEntity> getTaskList(Collection<TaskEntity> taskCollection, String taskId, String dpId, Integer pageSize, Integer pageNum, int size, String done) {
-        List<TaskEntity> list = new ArrayList<>();
-        //wait数据为空
-        if (size == 0) {
-            return list;
-        }
+    public Map<String, Object> getTaskMap(List<TaskEntity> taskList, Map<String, Object> maps, Collection<TaskEntity> taskEntities, String taskId, String
+            dpId, Integer start, Integer length) {
+        int i = 0;
+        int k = 0;
+        if (taskEntities != null) {
+            if (StringUtils.isEmpty(taskId) && StringUtils.isEmpty(dpId)) {
+                for (TaskEntity taskEntity : taskEntities) {
+                    if (i >= start && taskList.size() < length) {
+                        taskEntity.setId(i + 1);
+                        taskList.add(taskEntity);
+                    }
+                    i++;
+                    k++;
+                }
+            }
 
-        if (StringUtils.isEmpty(done)) {
-            list = taskCollection.stream().filter(taskEntity -> (StringUtils.isEmpty(dpId) || taskEntity.getTaskId().equals(taskId)) &&
-                    (StringUtils.isEmpty(taskId) || taskEntity.getDpId().equals(dpId))).collect(Collectors.toList());
-        } else {
-            done = done.toLowerCase();
-            //stop接口查询complete与exception需求 true为正常执行完毕任务逻辑
-            if ("true".equals(done)) {
-                list = taskCollection.stream().filter(taskEntity -> (StringUtils.isEmpty(dpId) || taskEntity.getTaskId().equals(taskId)) &&
-                        (StringUtils.isEmpty(taskId) || taskEntity.getDpId().equals(dpId))
-                        && taskEntity.getStatus().equals(TaskStatusEnum.COMPLETE.getCode())).collect(Collectors.toList());
-            } else {
-                list = taskCollection.stream().filter(taskEntity -> (StringUtils.isEmpty(dpId) || taskEntity.getTaskId().equals(taskId)) &&
-                        (StringUtils.isEmpty(taskId) || taskEntity.getDpId().equals(dpId))
-                        && !taskEntity.getStatus().equals(TaskStatusEnum.COMPLETE.getCode())).collect(Collectors.toList());
+            if (!StringUtils.isEmpty(taskId) && StringUtils.isEmpty(dpId)) {
+                for (TaskEntity taskEntity : taskEntities) {
+                    if (taskEntity.getTaskId().equals(taskId)) {
+                        if (i >= start && taskList.size() < length) {
+                            taskEntity.setId(i + 1);
+                            taskList.add(taskEntity);
+                        }
+                        i++;
+                    }
+                    k++;
+                }
+            }
+
+            if (StringUtils.isEmpty(taskId) && !StringUtils.isEmpty(dpId)) {
+                for (TaskEntity taskEntity : taskEntities) {
+                    if (taskEntity.getDpId().equals(dpId)) {
+                        if (i >= start && taskList.size() < length) {
+                            taskEntity.setId(i + 1);
+                            taskList.add(taskEntity);
+                        }
+                        i++;
+                    }
+                    k++;
+                }
+            }
+
+            if (!StringUtils.isEmpty(taskId) && !StringUtils.isEmpty(dpId)) {
+                for (TaskEntity taskEntity : taskEntities) {
+                    if (taskEntity.getTaskId().equals(taskId) && taskEntity.getDpId().equals(dpId)) {
+                        if (i >= start && taskList.size() < length) {
+                            taskEntity.setId(i + 1);
+                            taskList.add(taskEntity);
+                        }
+                        i++;
+                    }
+                    k++;
+                }
             }
         }
-
-        if (pageNum == null || pageSize == null) {
-            return list;
-        }
-        int maxPage = size % pageSize == 0 ? size / pageSize : size / pageSize + 1;
-        if (pageNum > maxPage || pageNum <= 0) {
-            return new ArrayList<>();
-        } else {
-            int begin = (pageNum - 1) * pageSize;
-            int end = Math.min(pageNum * pageSize, size);
-            return list.subList(begin, end);
-        }
+        maps.put("recordsTotal", k);
+        maps.put("recordsFiltered", i);
+        maps.put("data", taskList);
+        return maps;
     }
 
 }

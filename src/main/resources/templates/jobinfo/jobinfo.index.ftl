@@ -40,54 +40,30 @@
                     </div>
                 </div>
 
-                <#--                <div class="col-xs-2">-->
-                <#--                    <label for="glueRemark" class="col-sm-2 control-label">TaskId</label>-->
-                <div class="col-xs-3">
-                    <label for="lastname" class="col-sm-3 control-label">启用</label>
-                    <div class="col-sm-4"><input type="text" class="form-control" name="enabled"
-                                                 placeholder="启用" maxlength="50"></div>
-                    <label for="lastname" class="col-sm-3 control-label">状态</label>
-                    <div class="col-sm-4"><input type="text" class="form-control" name="liveStatus"
-                                                 placeholder="状态" maxlength="100"></div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                		<span class="input-group-addon">
+	                  		连锁ID
+	                	</span>
+                        <input type="text" class="form-control" id="dpId">
+                    </div>
                 </div>
-                <#--&lt;#&ndash;                <div class="col-xs-2">&ndash;&gt;-->
-                <#--&lt;#&ndash;                    <label for="glueRemark" class="col-sm-2 control-label">taks</label>&ndash;&gt;-->
-                <#--&lt;#&ndash;                    <input type="text" class="form-control" id="glueRemark" placeholder="task" maxlength="64">&ndash;&gt;-->
-                <#--&lt;#&ndash;                </div>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                </div>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                <div class="col-xs-1">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                    <div class="input-group">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                        <select class="form-control" id="triggerStatus">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                            <option value="-1">${I18n.system_all}</option>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                            <option value="0">${I18n.jobinfo_opt_stop}</option>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                            <option value="1">${I18n.jobinfo_opt_start}</option>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                        </select>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                    </div>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                </div>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                <div class="col-xs-2">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                    <div class="input-group">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                        <input type="text" class="form-control" id="jobDesc"&ndash;&gt;-->
-                <#--                &lt;#&ndash;                               placeholder="${I18n.system_please_input}${I18n.jobinfo_field_jobdesc}">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                    </div>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                </div>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                <div class="col-xs-2">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                    <div class="input-group">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                        <input type="text" class="form-control" id="executorHandler"&ndash;&gt;-->
-                <#--                &lt;#&ndash;                               placeholder="${I18n.system_please_input}JobHandler">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                    </div>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                </div>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                <div class="col-xs-2">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                    <div class="input-group">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                        <input type="text" class="form-control" id="author"&ndash;&gt;-->
-                <#--                &lt;#&ndash;                               placeholder="${I18n.system_please_input}${I18n.jobinfo_field_author}">&ndash;&gt;-->
-                <#--                &lt;#&ndash;                    </div>&ndash;&gt;-->
-                <#--                &lt;#&ndash;                </div>&ndash;&gt;-->
+
+                <div class="col-xs-2">
+                    <div class="input-group">
+                		<span class="input-group-addon">
+	                  		任务ID
+	                	</span>
+                        <input type="text" class="form-control" id="taskId">
+                    </div>
+                </div>
+
                 <div class="col-xs-1">
                     <button class="btn btn-block btn-info" id="searchBtn">搜索</button>
                 </div>
-                <div class="col-xs-1">
-                    <button class="btn btn-block btn-success add" type="button">添加</button>
-                </div>
+<#--                <div class="col-xs-1">-->
+<#--                    <button class="btn btn-block btn-success add" type="button">添加</button>-->
+<#--                </div>-->
             </div>
 
             <div class="row">

@@ -70,7 +70,7 @@
 <#macro commonHeader>
     <header class="main-header">
         <a href="${request.contextPath}/" class="logo">
-            <span class="logo-mini"><b>XXL</b></span>
+            <span class="logo-mini"><b>DTM</b></span>
             <span class="logo-lg"><b>Dtimer调度中心</b></span>
         </a>
         <nav class="navbar navbar-static-top" role="navigation">
@@ -148,18 +148,18 @@
                 <li class="nav-click <#if pageName == "jobinfo">active</#if>"><a
                             href="${request.contextPath}/jobinfo"><i
                                 class="fa fa-circle-o text-yellow"></i><span>任务管理</span></a></li>
-                <li class="nav-click <#if pageName == "joblog">active</#if>"><a href="${request.contextPath}/joblog"><i
-                                class="fa fa-circle-o text-green"></i><span>调度日志</span></a></li>
-                <#--                <#if Request["XXL_JOB_LOGIN_IDENTITY"].role == 1>-->
-                <#if 1 == 1>
-                    <li class="nav-click <#if pageName == "jobgroup">active</#if>"><a
-                                href="${request.contextPath}/jobgroup"><i
-                                    class="fa fa-circle-o text-red"></i><span>执行器管理</span></a></li>
-                    <li class="nav-click <#if pageName == "user">active</#if>"><a href="${request.contextPath}/user"><i
-                                    class="fa fa-circle-o text-purple"></i><span>用户管理</span></a></li>
-                </#if>
-                <li class="nav-click <#if pageName == "help">active</#if>"><a href="${request.contextPath}/help"><i
-                                class="fa fa-circle-o text-gray"></i><span>使用教程</span></a></li>
+<#--                <li class="nav-click <#if pageName == "joblog">active</#if>"><a href="${request.contextPath}/joblog"><i-->
+<#--                                class="fa fa-circle-o text-green"></i><span>调度日志</span></a></li>-->
+<#--                &lt;#&ndash;                <#if Request["XXL_JOB_LOGIN_IDENTITY"].role == 1>&ndash;&gt;-->
+<#--                <#if 1 == 1>-->
+<#--                    <li class="nav-click <#if pageName == "jobgroup">active</#if>"><a-->
+<#--                                href="${request.contextPath}/jobgroup"><i-->
+<#--                                    class="fa fa-circle-o text-red"></i><span>执行器管理</span></a></li>-->
+<#--                    <li class="nav-click <#if pageName == "user">active</#if>"><a href="${request.contextPath}/user"><i-->
+<#--                                    class="fa fa-circle-o text-purple"></i><span>用户管理</span></a></li>-->
+<#--                </#if>-->
+<#--                <li class="nav-click <#if pageName == "help">active</#if>"><a href="${request.contextPath}/help"><i-->
+<#--                                class="fa fa-circle-o text-gray"></i><span>使用教程</span></a></li>-->
             </ul>
         </section>
         <!-- /.sidebar -->
