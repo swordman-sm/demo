@@ -3,204 +3,186 @@ $(function () {
     var jstat = $("#jobStatus").val()
     console.log("jstat===" + jstat)
     var url = base_url + "/jobinfo/" + jstat
+
     // init date tables
-    var jobTable = $("#job_list").dataTable({
-        "deferRender": true,
-        "processing": true,
-        "serverSide": true,
-        "ajax": {
-            url: url,
-            type: "post",
-            data: function (d) {
-                console.log(url)
-                var obj = {};
-                obj.taskId = $('#taskId').val();
-                obj.dpId = $('#dpId').val();
-                obj.date = $('#date').val();
-                obj.priority = $('#priority').val();
-                obj.host = $('#host').val();
-                obj.port = $('#port').val();
-                obj.status = $('#status').val();
-                obj.autoRetry = $('#autoRetry').val();
-                obj.retry = $('#retry').val();
-                obj.token = $('#token').val();
-                obj.remark = $('#remark').val();
-                obj.extendPara = $('#extendPara').val();
-                obj.createTime = $('#createTime').val();
-                obj.updateTime = $('#updateTime').val();
-                obj.start = d.start;
-                obj.length = d.length;
-                console.log(obj.start)
-                console.log(obj.length)
-                return obj;
-            }
-        },
-        "searching": false,
-        "ordering": false,
-        //"scrollX": true,	// scroll x，close self-adaption
-        "columns": [
-            {
-                "data": 'id',
-                "bSortable": false,
-                "visible": true,
-                "width": '3%'
-            },
-            {
-                "data": 'taskId',
-                "visible": true,
-                "width": '3%'
-            },
-            {
-                "data": 'dpId',
-                "visible": true,
-                "width": '3%'
-            },
-            {
-                "data": 'date',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'priority',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'host',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'port',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'extendPara',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'status',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'remark',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'token',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'autoRetry',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'retry',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'createTime',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": 'updateTime',
-                "visible": true,
-                "width": '7%'
-            },
-            {
-                "data": '操作',
-                "width": '10%',
-                "render": function (data, type, row) {
-                    return function () {
 
-                        // console.log(data)
-                        // status
-                        // var start_stop_div = "";
-                        // if (1 == row.triggerStatus) {
-                        //     start_stop_div = '<li><a href="javascript:void(0);" class="job_operate" _type="job_pause" >' + '停止' + '</a></li>\n';
-                        // } else {
-                        //     start_stop_div = '<li><a href="javascript:void(0);" class="job_operate" _type="job_resume" >' + '开始' + '</a></li>\n';
-                        // }
-                        //
-                        // // job_next_time_html
-                        // var job_next_time_html = '';
-                        // if (row.scheduleType == 'CRON' || row.scheduleType == 'FIX_RATE') {
-                        //     job_next_time_html = '<li><a href="javascript:void(0);" class="job_next_time" >' + '下次执行时间' + '</a></li>\n';
-                        // }
-                        //
-                        // // log url
-                        // var logHref = base_url + '/joblog?jobId=' + row.id;
-                        //
-                        // // code url
-                        // var codeBtn = "";
-                        // if ('BEAN' != row.glueType) {
-                        //     var codeUrl = base_url + '/jobcode?jobId=' + row.id;
-                        //     codeBtn = '<li><a href="' + codeUrl + '" target="_blank" >GLUE IDE</a></li>\n';
-                        //     codeBtn += '<li class="divider"></li>\n';
-                        // }
+    function initTable(url) {
+        return $("#job_list").dataTable({
+            "deferRender": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                url: url,
+                type: "post",
+                data: function (d) {
+                    console.log(d)
+                    var obj = {};
+                    obj.taskId = $('#taskId').val();
+                    obj.dpId = $('#dpId').val();
+                    obj.date = $('#date').val();
+                    obj.priority = $('#priority').val();
+                    obj.host = $('#host').val();
+                    obj.port = $('#port').val();
+                    obj.status = $('#status').val();
+                    obj.autoRetry = $('#autoRetry').val();
+                    obj.retry = $('#retry').val();
+                    obj.token = $('#token').val();
+                    obj.remark = $('#remark').val();
+                    obj.extendPara = $('#extendPara').val();
+                    obj.createTime = $('#createTime').val();
+                    obj.updateTime = $('#updateTime').val();
+                    obj.start = d.start;
+                    obj.length = d.length;
+                    obj.done = $('#done').val();
+                    console.log(obj.start)
+                    console.log(obj.length)
+                    console.log(obj.done)
+                    return obj;
+                }
+            },
+            "searching": false,
+            "ordering": false,
+            //"scrollX": true,	// scroll x，close self-adaption
+            "columns": [
+                {
+                    "data": 'id',
+                    "bSortable": false,
+                    "visible": true,
+                    "width": '3%'
+                },
+                {
+                    "data": 'taskId',
+                    "visible": true,
+                    "width": '3%'
+                },
+                {
+                    "data": 'dpId',
+                    "visible": true,
+                    "width": '3%'
+                },
+                {
+                    "data": 'date',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'priority',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'host',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'port',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'extendPara',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'status',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'remark',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'token',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'autoRetry',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'retry',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'createTime',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'updateTime',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": '操作',
+                    "width": '10%',
+                    "render": function (data, type, row) {
+                        return function () {
 
-                        // data
-                        tableData['key' + row.id] = row;
+                            // data
+                            tableData['key' + row.id] = row;
 
-                        // opt
-                        var html = '<div class="btn-group">\n' +
-                            '     <button type="button" class="btn btn-primary btn-sm">' + '操作' + '</button>\n' +
-                            '     <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">\n' +
-                            '       <span class="caret"></span>\n' +
-                            '       <span class="sr-only">Toggle Dropdown</span>\n' +
-                            '     </button>\n' +
-                            '     <ul class="dropdown-menu" role="menu" _id="' + row.id + '" >\n' +
-                            // '       <li><a href="javascript:void(0);" class="job_trigger" >' + '执行一次' + '</a></li>\n' +
-                            // '       <li><a href="' + logHref + '">' + '查询日志' + '</a></li>\n' +
-                            // '       <li><a href="javascript:void(0);" class="job_registryinfo" >' + '注册节点' + '</a></li>\n' +
-                            // job_next_time_html +
-                            // '       <li class="divider"></li>\n' +
-                            // codeBtn +
-                            // start_stop_div +
-                            // '       <li><a href="javascript:void(0);" class="update" >' + '编辑' + '</a></li>\n' +
-                            '       <li><a href="javascript:void(0);" class="job_delete">' + '删除' + '</a></li>\n' +
-                            '       <li><a href="javascript:void(0);" class="job_retry">' + '重试' + '</a></li>\n' +
-                            '     </ul>\n' +
-                            '   </div>';
+                            // opt
+                            var html = '<div class="btn-group">\n' +
+                                '     <button type="button" class="btn btn-primary btn-sm">' + '操作' + '</button>\n' +
+                                '     <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">\n' +
+                                '       <span class="caret"></span>\n' +
+                                '       <span class="sr-only">Toggle Dropdown</span>\n' +
+                                '     </button>\n' +
+                                '     <ul class="dropdown-menu" role="menu" _id="' + row.id + '" >\n' +
+                                // '       <li><a href="javascript:void(0);" class="job_trigger" >' + '执行一次' + '</a></li>\n' +
+                                // '       <li><a href="' + logHref + '">' + '查询日志' + '</a></li>\n' +
+                                // '       <li><a href="javascript:void(0);" class="job_registryinfo" >' + '注册节点' + '</a></li>\n' +
+                                // job_next_time_html +
+                                // '       <li class="divider"></li>\n' +
+                                // codeBtn +
+                                // start_stop_div +
+                                // '       <li><a href="javascript:void(0);" class="update" >' + '编辑' + '</a></li>\n' +
+                                '       <li><a href="javascript:void(0);" class="job_delete">' + '删除' + '</a></li>\n' +
+                                '       <li><a href="javascript:void(0);" class="job_retry">' + '重试' + '</a></li>\n' +
+                                '     </ul>\n' +
+                                '   </div>';
 
-                        return html;
-                    };
+                            return html;
+                        };
+                    }
+                }
+            ],
+            "language": {
+                "sProcessing": '处理中...',
+                "sLengthMenu": '每页 _MENU_ 条记录',
+                "sZeroRecords": '没有匹配结果',
+                "sInfo": '第 _PAGE_ 页 ( 总共 _PAGES_ 页，_TOTAL_ 条记录 )',
+                "sInfoEmpty": '无记录',
+                "sInfoFiltered": '(由 _MAX_ 项结果过滤)',
+                "sInfoPostFix": "",
+                "sSearch": '搜索',
+                "sUrl": "",
+                "sEmptyTable": '表中数据为空',
+                "sLoadingRecords": '载入中...',
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": '首页',
+                    "sPrevious": '上页',
+                    "sNext": '下页',
+                    "sLast": '末页'
+                },
+                "oAria": {
+                    "sSortAscending": ': 以升序排列此列',
+                    "sSortDescending": ': 以降序排列此列'
                 }
             }
-        ],
-        "language": {
-            "sProcessing": '处理中...',
-            "sLengthMenu": '每页 _MENU_ 条记录',
-            "sZeroRecords": '没有匹配结果',
-            "sInfo": '第 _PAGE_ 页 ( 总共 _PAGES_ 页，_TOTAL_ 条记录 )',
-            "sInfoEmpty": '无记录',
-            "sInfoFiltered": '(由 _MAX_ 项结果过滤)',
-            "sInfoPostFix": "",
-            "sSearch": '搜索',
-            "sUrl": "",
-            "sEmptyTable": '表中数据为空',
-            "sLoadingRecords": '载入中...',
-            "sInfoThousands": ",",
-            "oPaginate": {
-                "sFirst": '首页',
-                "sPrevious": '上页',
-                "sNext": '下页',
-                "sLast": '末页'
-            },
-            "oAria": {
-                "sSortAscending": ': 以升序排列此列',
-                "sSortDescending": ': 以降序排列此列'
-            }
-        }
-    });
+        });
+    }
+
+    var jobTable = initTable(url)
 
     // table data
     var tableData = {};
@@ -208,19 +190,24 @@ $(function () {
 
     // jobGroup change
     $('#jobStatus').on('change', function () {
-        //reload
-        var jobStatus = $('#jobStatus').val();
-        // var jstat = $("#jobStatus option:selected").val()
-        // console.log(jstat)
-        // window.location.href = base_url + "/jobinfo/" + jobStatus;
-        url = base_url + "/jobinfo/" + jobStatus
-        jobTable.fnDraw(false);
+        var jstat = $("#jobStatus").val()
+        if (jstat == "stop") {
+            console.log("stop...................")
+            $("#doned").show()
+        } else {
+            $("#doned").hide()
+        }
+        var change_url = base_url + "/jobinfo/" + jstat
+        jobTable.fnClearTable();
+        jobTable.fnDestroy();
+        jobTable = initTable(change_url)
+
     });
 
     // // search btn
-    // $('#searchBtn').on('click', function () {
-    //     jobTable.fnDraw();
-    // });
+    $('#searchBtn').on('click', function () {
+        jobTable.fnDraw();
+    });
     //
     // // jobGroup change
     // $('#jobGroup').on('change', function () {
@@ -314,9 +301,9 @@ $(function () {
     //         }
     //     });
     // });
-    $("#jobTriggerModal").on('hide.bs.modal', function () {
-        $("#jobTriggerModal .form")[0].reset();
-    });
+    // $("#jobTriggerModal").on('hide.bs.modal', function () {
+    //     $("#jobTriggerModal .form")[0].reset();
+    // });
 
     //
     // // job registryinfo

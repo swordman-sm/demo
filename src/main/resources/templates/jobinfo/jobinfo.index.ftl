@@ -40,6 +40,17 @@
                     </div>
                 </div>
 
+                <div class="col-xs-2" id="doned" hidden="hidden">
+                    <div class="input-group">
+                        <span class="input-group-addon">类型</span>
+                        <select class="form-control" id="done">
+                            <option value="all">全部</option>
+                            <option value="true">正常</option>
+                            <option value="false">异常</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="col-xs-2">
                     <div class="input-group">
                 		<span class="input-group-addon">
@@ -61,9 +72,9 @@
                 <div class="col-xs-1">
                     <button class="btn btn-block btn-info" id="searchBtn">搜索</button>
                 </div>
-<#--                <div class="col-xs-1">-->
-<#--                    <button class="btn btn-block btn-success add" type="button">添加</button>-->
-<#--                </div>-->
+                <#--                <div class="col-xs-1">-->
+                <#--                    <button class="btn btn-block btn-success add" type="button">添加</button>-->
+                <#--                </div>-->
             </div>
 
             <div class="row">

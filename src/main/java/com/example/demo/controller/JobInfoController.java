@@ -77,9 +77,15 @@ public class JobInfoController {
     @ResponseBody
     public Map<String, Object> stop(String taskId, String dpId, Integer start, Integer length, String done) {
 
+        //每页第一个元素的id
+        start = start == null ? 0 : start;
+        //每页的容量 默认为1000个
+        length = length == null ? 1000 : length;
+        boolean isEmpty = StringUtils.isEmpty(done);
+        done = isEmpty ? "all" : done.toLowerCase();
+
         Map<String, Object> maps = new HashMap<>();
         HashOperations<String, String, TaskEntity> hashOperations = redisTemplate.opsForHash();
-//        Map<String, TaskEntity> taskEntityMap = hashOperations.entries(ThreadConstant.TASK_STOP_KEY);
 
         String pattern = "*" + (StringUtils.isEmpty(taskId) ? "_*" : "_" + taskId) + (StringUtils.isEmpty(dpId) ? "_*" : "_" + dpId);
         ScanOptions scanOptions = ScanOptions.scanOptions().match(pattern).count(1000).build();
@@ -87,20 +93,53 @@ public class JobInfoController {
 
         List<TaskEntity> taskList = new ArrayList<>();
         int i = 0;
-        while (entryCursor.hasNext()) {
-            Map.Entry<String, TaskEntity> entityEntry = entryCursor.next();
-            TaskEntity taskEntity = entityEntry.getValue();
-
-            if (i >= start && taskList.size() < length) {
-                taskEntity.setId(i + 1);
-                taskList.add(taskEntity);
-                System.out.println("遍历绑定键获取所有值:" + entityEntry.getKey() + "---" + entityEntry.getValue());
+        int k = 0;
+        if ("true".equals(done)) {
+            while (entryCursor.hasNext()) {
+                Map.Entry<String, TaskEntity> entityEntry = entryCursor.next();
+                TaskEntity taskEntity = entityEntry.getValue();
+                if (taskEntity.getStatus().equals(TaskStatusEnum.COMPLETE.getCode())) {
+                    if (i >= start && taskList.size() < length) {
+                        taskEntity.setId(i + 1);
+                        taskList.add(taskEntity);
+                    }
+                    i++;
+                }
+                k++;
             }
-            i++;
+        }
+
+        if ("false".equals(done)) {
+            while (entryCursor.hasNext()) {
+                Map.Entry<String, TaskEntity> entityEntry = entryCursor.next();
+                TaskEntity taskEntity = entityEntry.getValue();
+                if (!taskEntity.getStatus().equals(TaskStatusEnum.COMPLETE.getCode())) {
+                    if (i >= start && taskList.size() < length) {
+                        taskEntity.setId(i + 1);
+                        taskList.add(taskEntity);
+                    }
+                    i++;
+                }
+                k++;
+            }
+        }
+
+        if ("all".equals(done)) {
+            while (entryCursor.hasNext()) {
+                Map.Entry<String, TaskEntity> entityEntry = entryCursor.next();
+                TaskEntity taskEntity = entityEntry.getValue();
+                if (i >= start && taskList.size() < length) {
+                    taskEntity.setId(i + 1);
+                    taskList.add(taskEntity);
+                }
+                i++;
+                k++;
+            }
         }
         maps.put("recordsTotal", i);
-        maps.put("recordsFiltered", i);
+        maps.put("recordsFiltered", k);
         maps.put("data", taskList);
+        System.err.println(maps);
         return maps;
     }
 
