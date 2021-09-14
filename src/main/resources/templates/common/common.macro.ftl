@@ -250,7 +250,7 @@
             <strong>Copyright &copy; 2021-${.now?string('yyyy')} &nbsp;
                 <a href="https://a.cunjk.com/" target="_blank">Modify By Timer</a>
                 &nbsp;
-                <a href="https://a.cunjk.com/dtimer" target="_blank">github</a>
+                <a href="https://a.cunjk.com/" target="_blank">github</a>
             </strong><!-- All rights reserved. -->
         </div>
     </footer>

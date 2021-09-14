@@ -41,13 +41,13 @@
                                     <th name="enabled">启用</th>
                                     <th name="liveStatus">状态</th>
                                     <th name="startTime">启动时间</th>
-                                    <th name="lastAliveTime">AliveTime</th>
-                                    <th name="execTimeout">ExecTimeout(min)</th>
-                                    <th name="alarmTimeout">AlarmTimeout(min)</th>
+                                    <th name="lastAliveTime">心跳时间</th>
+                                    <th name="execTimeout">执行超时(min)</th>
+                                    <th name="alarmTimeout">心跳超时(min)</th>
                                     <th name="maxQueueSize">最大任务队列</th>
                                     <th name="maxRetry">最大重试次数</th>
-                                    <th name="queue">Queue</th>
-                                    <th name="run">Run</th>
+                                    <th name="queue">队列中</th>
+                                    <th name="run">执行中</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -157,17 +157,9 @@
 <!-- DataTables -->
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<!-- moment -->
-<#--<script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>-->
-<#-- cronGen -->
-<#--<script src="${request.contextPath}/static/plugins/cronGen/cronGen<#if I18n.admin_i18n?default('')?length gt 0 >_${I18n.admin_i18n}</#if>.js"></script>-->
-<#--<script src="${request.contextPath}/static/js/jobinfo.index.1.js"></script>-->
 <script src="${request.contextPath}/static/js/jobinfo.index.2.js"></script>
 <!-- daterangepicker -->
 <script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>
 <script src="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-<#-- echarts -->
-<#--<script src="${request.contextPath}/static/plugins/echarts/echarts.common.min.js"></script>-->
-<#--<script src="${request.contextPath}/static/js/index.js"></script>-->
 </body>
 </html>
