@@ -53,32 +53,32 @@ $(function () {
                 {
                     "data": 'taskId',
                     "visible": true,
-                    "width": '3%'
+                    "width": '4%'
                 },
                 {
                     "data": 'dpId',
                     "visible": true,
-                    "width": '3%'
+                    "width": '4%'
                 },
                 {
                     "data": 'date',
                     "visible": true,
-                    "width": '7%'
+                    "width": '6%'
                 },
                 {
                     "data": 'priority',
                     "visible": true,
-                    "width": '7%'
+                    "width": '4%'
                 },
                 {
                     "data": 'host',
                     "visible": true,
-                    "width": '7%'
+                    "width": '5%'
                 },
                 {
                     "data": 'port',
                     "visible": true,
-                    "width": '7%'
+                    "width": '4%'
                 },
                 {
                     "data": 'extendPara',
@@ -103,22 +103,22 @@ $(function () {
                 {
                     "data": 'autoRetry',
                     "visible": true,
-                    "width": '7%'
+                    "width": '5%'
                 },
                 {
                     "data": 'retry',
                     "visible": true,
-                    "width": '7%'
+                    "width": '5%'
                 },
                 {
                     "data": 'createTime',
                     "visible": true,
-                    "width": '7%'
+                    "width": '8%'
                 },
                 {
                     "data": 'updateTime',
                     "visible": true,
-                    "width": '7%'
+                    "width": '8%'
                 },
                 {
                     "data": '操作',
@@ -200,8 +200,9 @@ $(function () {
         var change_url = base_url + "/jobinfo/" + jstat
         jobTable.fnClearTable();
         jobTable.fnDestroy();
+        jobTable=null
         jobTable = initTable(change_url)
-
+        jobTable.fnDraw();
     });
 
     // // search btn

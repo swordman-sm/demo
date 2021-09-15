@@ -88,20 +88,20 @@
                                 <thead>
                                 <tr>
                                     <th name="id">ID</th>
-                                    <th name="taskId">TaskId</th>
-                                    <th name="dpId">DpId</th>
-                                    <th name="date">Date</th>
-                                    <th name="priority">Priority</th>
-                                    <th name="host">Host</th>
-                                    <th name="port">Port</th>
-                                    <th name="extendPara">ExtendPara</th>
-                                    <th name="status">Status</th>
-                                    <th name="remark">Remark</th>
-                                    <th name="token">Token</th>
-                                    <th name="autoRetry">AutoRetry</th>
-                                    <th name="retry">Retry</th>
-                                    <th name="createTime">CreateTime</th>
-                                    <th name="updateTime">UpdateTime</th>
+                                    <th name="taskId">任务ID</th>
+                                    <th name="dpId">连锁ID</th>
+                                    <th name="date">报表时间</th>
+                                    <th name="priority">优先级</th>
+                                    <th name="host">节点地址</th>
+                                    <th name="port">端口</th>
+                                    <th name="extendPara">扩展参数</th>
+                                    <th name="status">状态</th>
+                                    <th name="remark">备注</th>
+                                    <th name="token">密钥</th>
+                                    <th name="autoRetry">自动重试</th>
+                                    <th name="retry">重试次数</th>
+                                    <th name="createTime">创建时间</th>
+                                    <th name="updateTime">更新时间</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
