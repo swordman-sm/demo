@@ -24,7 +24,11 @@
 
         <!-- Main content -->
         <section class="content">
-
+            <div class="row">
+                <div class="col-xs-5">
+                    <li>自动刷新 <input type="checkbox" name="my-checkbox" checked></li>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">

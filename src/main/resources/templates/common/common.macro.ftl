@@ -10,6 +10,9 @@
     <!-- Bootstrap -->
     <link rel="stylesheet"
           href="${request.contextPath}/static/adminlte/bower_components/bootstrap/css/bootstrap.min.css">
+    <!--bootstrap-switch-->
+    <link rel="stylesheet"
+          href="${request.contextPath}/static/adminlte/bower_components/bootstrap-switch/bootstrap-switch.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet"
           href="${request.contextPath}/static/adminlte/bower_components/font-awesome/css/font-awesome.min.css">
@@ -41,6 +44,8 @@
     <script src="${request.contextPath}/static/adminlte/bower_components/jquery/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="${request.contextPath}/static/adminlte/bower_components/bootstrap/js/bootstrap.min.js"></script>
+    <!--bootstrap-switch-->
+    <script src="${request.contextPath}/static/adminlte/bower_components/bootstrap-switch/bootstrap-switch.min.js"></script>
     <!-- FastClick -->
     <script src="${request.contextPath}/static/adminlte/bower_components/fastclick/fastclick.js"></script>
     <!-- AdminLTE App -->
@@ -148,18 +153,18 @@
                 <li class="nav-click <#if pageName == "jobinfo">active</#if>"><a
                             href="${request.contextPath}/jobinfo"><i
                                 class="fa fa-circle-o text-yellow"></i><span>任务管理</span></a></li>
-<#--                <li class="nav-click <#if pageName == "joblog">active</#if>"><a href="${request.contextPath}/joblog"><i-->
-<#--                                class="fa fa-circle-o text-green"></i><span>调度日志</span></a></li>-->
-<#--                &lt;#&ndash;                <#if Request["XXL_JOB_LOGIN_IDENTITY"].role == 1>&ndash;&gt;-->
-<#--                <#if 1 == 1>-->
-<#--                    <li class="nav-click <#if pageName == "jobgroup">active</#if>"><a-->
-<#--                                href="${request.contextPath}/jobgroup"><i-->
-<#--                                    class="fa fa-circle-o text-red"></i><span>执行器管理</span></a></li>-->
-<#--                    <li class="nav-click <#if pageName == "user">active</#if>"><a href="${request.contextPath}/user"><i-->
-<#--                                    class="fa fa-circle-o text-purple"></i><span>用户管理</span></a></li>-->
-<#--                </#if>-->
-<#--                <li class="nav-click <#if pageName == "help">active</#if>"><a href="${request.contextPath}/help"><i-->
-<#--                                class="fa fa-circle-o text-gray"></i><span>使用教程</span></a></li>-->
+                <#--                <li class="nav-click <#if pageName == "joblog">active</#if>"><a href="${request.contextPath}/joblog"><i-->
+                <#--                                class="fa fa-circle-o text-green"></i><span>调度日志</span></a></li>-->
+                <#--                &lt;#&ndash;                <#if Request["XXL_JOB_LOGIN_IDENTITY"].role == 1>&ndash;&gt;-->
+                <#--                <#if 1 == 1>-->
+                <#--                    <li class="nav-click <#if pageName == "jobgroup">active</#if>"><a-->
+                <#--                                href="${request.contextPath}/jobgroup"><i-->
+                <#--                                    class="fa fa-circle-o text-red"></i><span>执行器管理</span></a></li>-->
+                <#--                    <li class="nav-click <#if pageName == "user">active</#if>"><a href="${request.contextPath}/user"><i-->
+                <#--                                    class="fa fa-circle-o text-purple"></i><span>用户管理</span></a></li>-->
+                <#--                </#if>-->
+                <#--                <li class="nav-click <#if pageName == "help">active</#if>"><a href="${request.contextPath}/help"><i-->
+                <#--                                class="fa fa-circle-o text-gray"></i><span>使用教程</span></a></li>-->
             </ul>
         </section>
         <!-- /.sidebar -->

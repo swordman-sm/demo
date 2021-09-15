@@ -1,5 +1,28 @@
 $(function () {
 
+    $('input[name="my-checkbox"]').bootstrapSwitch({
+        "onColor": "primary",
+        "offColor": "default",
+        "onText": "",
+        "offText": "",
+        "size": "normal",
+        onSwitchChange: function (event, state) {
+            var t = null
+            if (state == true) {
+                t = window.setInterval(function () {
+                    jobTable.fnDraw(false)
+                }, 2000);
+
+            } else {
+                window.clearInterval(t)
+                // setInterval(function () {
+                //     jobTable.fnDraw(false)
+                // }, 2000);
+                // jobTable.fnDraw(false)
+            }
+        }
+    });
+
     // init date tables
     var jobTable = $("#job_list").dataTable({
         "deferRender": true,
@@ -118,6 +141,7 @@ $(function () {
                 "width": '10%',
                 "render": function (data, type, row) {
                     return function () {
+                        console.log("刷新...............")
                         // data
                         // tableData['key' + row.id] = row;
                         tableData[row.host + '_' + row.port] = row;
