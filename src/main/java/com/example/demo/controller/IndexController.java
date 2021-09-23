@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Controller
+@Controller //https://github.com/waylau/netty-4-user-guide-demos.git
 public class IndexController {
 
 
@@ -50,10 +50,10 @@ public class IndexController {
         return loginService.login(request, response, userName, password, ifRem);
     }
 
-    @RequestMapping(value="logout", method=RequestMethod.POST)
+    @RequestMapping(value = "logout", method = RequestMethod.POST)
     @ResponseBody
-    @PermissionLimit(limit=false)
-    public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response){
+    @PermissionLimit(limit = false)
+    public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response) {
         return loginService.logout(request, response);
     }
 

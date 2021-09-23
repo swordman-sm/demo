@@ -19,6 +19,12 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
+    password:
+    maxIdle: 10
+    maxTotal: 50
+    timeout: 6000
+    minIdle: 2
+    maxWaitMillis: 15000
 
 mybatis:
   mapper-locations: classpath:/mybatis-mapper/*Mapper.xml

@@ -1,5 +1,4 @@
 $(function () {
-
     var jstat = $("#jobStatus").val()
     console.log("jstat===" + jstat)
     var url = base_url + "/jobinfo/" + jstat
@@ -63,7 +62,11 @@ $(function () {
                 {
                     "data": 'date',
                     "visible": true,
-                    "width": '6%'
+                    "width": '6%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": 'priority',
@@ -73,52 +76,97 @@ $(function () {
                 {
                     "data": 'host',
                     "visible": true,
-                    "width": '5%'
+                    "width": '5%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": 'port',
                     "visible": true,
-                    "width": '4%'
+                    "width": '4%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": 'extendPara',
                     "visible": true,
-                    "width": '7%'
+                    "width": '7%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": 'status',
                     "visible": true,
-                    "width": '7%'
+                    "width": '7%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": 'remark',
                     "visible": true,
-                    "width": '7%'
+                    "width": '7%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        // $(td).css("width", "100%").css("word-break", "keep-all")
+                        //     .css("white-space", "nowrap").css("overflow", "hidden")
+                        //     .css("text-overflow", "ellipsis").css("-o-text-overflow", "ellipsis")
+                        //     .css("-icab-text-overflow", "ellipsis").css("-khtml-text-overflow", "ellipsis")
+                        //     .css("-moz-text-overflow", "ellipsis").css("-webkit-text-overflow", "ellipsis");
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": 'token',
                     "visible": true,
-                    "width": '7%'
+                    "width": '7%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": 'autoRetry',
                     "visible": true,
-                    "width": '5%'
+                    "width": '5%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": 'retry',
                     "visible": true,
-                    "width": '5%'
+                    "width": '5%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": 'createTime',
                     "visible": true,
-                    "width": '8%'
+                    "width": '8%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": 'updateTime',
                     "visible": true,
-                    "width": '8%'
+                    "width": '8%',
+                    'createdCell': function (td, cellData, rowData, row, col) {
+                        $(td).attr("style","overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                        $(td).attr('title', cellData);
+                    }
                 },
                 {
                     "data": '操作',
@@ -200,7 +248,7 @@ $(function () {
         var change_url = base_url + "/jobinfo/" + jstat
         jobTable.fnClearTable();
         jobTable.fnDestroy();
-        jobTable=null
+        jobTable = null
         jobTable = initTable(change_url)
         jobTable.fnDraw();
     });

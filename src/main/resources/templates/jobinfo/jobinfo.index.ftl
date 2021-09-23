@@ -11,6 +11,36 @@
     <title>任务调度中心</title>
 </head>
 <body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxljob_adminlte_settings"]?exists && "off" == cookieMap["xxljob_adminlte_settings"].value >sidebar-collapse</#if>">
+
+<#--<style type="text/css">-->
+<#--    .table th, .table td {-->
+<#--        text-align: center;-->
+<#--        vertical-align: middle !important;-->
+<#--    }-->
+
+<#--    table {-->
+<#--        width: 100px;-->
+<#--        table-layout: fixed; /* 只有定义了表格的布局算法为fixed，下面td的定义才能起作用。 */-->
+<#--    }-->
+
+<#--    td {-->
+<#--        width: 100%;-->
+<#--        word-break: keep-all; /* 不换行 */-->
+<#--        white-space: nowrap; /* 不换行 */-->
+<#--        overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */-->
+<#--        text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/-->
+<#--        -o-text-overflow: ellipsis;-->
+<#--        -icab-text-overflow: ellipsis;-->
+<#--        -khtml-text-overflow: ellipsis;-->
+<#--        -moz-text-overflow: ellipsis;-->
+<#--        -webkit-text-overflow: ellipsis;-->
+<#--    }-->
+
+<#--    .table {-->
+<#--        table-layout: fixed;-->
+<#--    }-->
+<#--</style>-->
+
 <div class="wrapper">
     <!-- header -->
     <@netCommon.commonHeader />
@@ -84,7 +114,7 @@
                             <h3 class="box-title">调度列表</h3>
                         </div>-->
                         <div class="box-body">
-                            <table id="job_list" class="table table-bordered table-striped" width="100%">
+                            <table id="job_list" style="table-layout:fixed" class="table table-bordered table-hover table-striped" width="100%">
                                 <thead>
                                 <tr>
                                     <th name="id">ID</th>
