@@ -64,7 +64,7 @@ public class DemoWebsocket {
             clients.put(userId, this);
             logger.info("现在连接的客户编码为：" + userId);
         }
-        for (int i = 0; i < 100; i++) {
+        while (session.isOpen()) {
             final Map<String, Object> config = getConfig();
             session.getBasicRemote().sendText(config.toString());
             TimeUnit.SECONDS.sleep(1);
@@ -136,7 +136,7 @@ public class DemoWebsocket {
     @OnError
     public void onError(Session session, Throwable error) {
         logger.debug("用户id为：{}的连接发送错误", this.userId);
-        error.printStackTrace();
+//        error.printStackTrace();
     }
 
     /**
