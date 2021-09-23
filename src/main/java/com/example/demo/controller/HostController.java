@@ -7,6 +7,7 @@ import com.example.demo.model.ReturnT;
 import com.example.demo.model.ThreadConstant;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
  * @date 2021/09/10 16:38
  **/
 @Controller
+@Component
 @RequestMapping("/hostinfo")
 public class HostController {
 
