@@ -16,6 +16,8 @@ public class MachineRelateResponseVO extends MachineRelate {
 
     private Long queue;
 
+    private Long timeout;
+
     public MachineRelateResponseVO() {
     }
 
@@ -30,6 +32,14 @@ public class MachineRelateResponseVO extends MachineRelate {
         this.setMaxQueueSize(machineRelate.getMaxQueueSize());
         this.setMaxRetry(machineRelate.getMaxRetry());
         this.setStartTime(machineRelate.getStartTime());
+    }
+
+    public Long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(Long timeout) {
+        this.timeout = timeout;
     }
 
     public Integer getId() {
@@ -62,6 +72,7 @@ public class MachineRelateResponseVO extends MachineRelate {
                 "id=" + id +
                 ", run=" + run +
                 ", queue=" + queue +
+                ", timeout=" + timeout +
                 "} " + super.toString();
     }
 }

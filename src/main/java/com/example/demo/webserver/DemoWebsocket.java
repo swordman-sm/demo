@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.controller.HostController;
 import com.example.demo.model.MachineRelateResponseVO;
 import com.example.demo.model.ThreadConstant;
+import com.example.demo.utils.DateUtil;
 import com.example.demo.utils.SpringBeanHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -57,19 +56,40 @@ public class DemoWebsocket {
     @OnOpen
     public void onOpen(@PathParam("userId") String userId, Session session) throws IOException, InterruptedException {
         logger.debug("新连接：{}", userId);
+
+        DemoWebsocket demoWebsocket = clients.get(userId);
+        if (demoWebsocket != null) {
+//            demoWebsocket.session.getBasicRemote().sendText(uri + "重复连接被挤下线了");
+            logger.error("重复连接被挤下线了");
+            //关闭连接，触发关闭连接方法onClose()
+            demoWebsocket.session.close();
+        }
+
         //首先要判断该ID是否已经加入，如果已经加入不重复加入
         if (!isEmpty(userId)) {
             this.userId = userId;
             this.session = session;
-            clients.put(userId, this);
             logger.info("现在连接的客户编码为：" + userId);
         }
-        while (session.isOpen()) {
-            final Map<String, Object> config = getConfig();
-            session.getBasicRemote().sendText(config.toString());
-            TimeUnit.SECONDS.sleep(1);
-        }
 
+        clients.put(userId, this);
+        long start = System.currentTimeMillis();
+        CompletableFuture.runAsync(() -> {
+            try {
+                while (session.isOpen()) {
+                    if (System.currentTimeMillis() - start > 300 * 1000) {
+                        session.close();
+                        logger.error("session 关闭");
+                        return;
+                    }
+                    final Map<String, Object> config = getConfig();
+                    session.getBasicRemote().sendText(config.toString());
+                    TimeUnit.SECONDS.sleep(1);
+                }
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 
@@ -83,26 +103,37 @@ public class DemoWebsocket {
         Map<String, TaskEntity> runTaskMap = hashOperations2.entries(ThreadConstant.TASK_RUN_KEY);
         Map<String, Long> runCountMap = runTaskMap.values().stream().collect(Collectors.
                 groupingBy(ts -> ts.getHost() + "_" + ts.getPort(), Collectors.counting()));
+
+        Map<String, Long> timeoutMap = runTaskMap.values().stream()
+                .filter(taskEntity -> {
+                    try {
+                        return DateUtil.getDistanceMinutes(taskEntity.getUpdateTime(), DateUtil.nowDateForStrYMDHMS()) > 10;
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }).collect(Collectors.
+                        groupingBy(ts -> ts.getHost() + "_" + ts.getPort(), Collectors.counting()));
+
         Map<String, TaskEntity> queueTaskMap = hashOperations2.entries(ThreadConstant.TASK_QUEUE_KEY);
         Map<String, Long> queueCountMap = queueTaskMap.values().stream().collect(Collectors.
                 groupingBy(ts -> ts.getHost() + "_" + ts.getPort(), Collectors.counting()));
 
+        TreeMap<String, MachineRelate> treeMap = new TreeMap<>(configMap);
         int id = 1;
-        for (Map.Entry<String, MachineRelate> entry : configMap.entrySet()) {
+        for (Map.Entry<String, MachineRelate> entry : treeMap.entrySet()) {
             MachineRelate machineRelate = entry.getValue();
             MachineRelateResponseVO machineRelateResponseVO = new MachineRelateResponseVO(machineRelate);
             machineRelateResponseVO.setId(id);
             machineRelateResponseVO.setRun(runCountMap.getOrDefault(entry.getKey(), 0L));
             machineRelateResponseVO.setQueue(queueCountMap.getOrDefault(entry.getKey(), 0L));
+            machineRelateResponseVO.setTimeout(timeoutMap.getOrDefault(entry.getKey(), 0L));
             machineRelateList.add(machineRelateResponseVO);
             id++;
         }
         maps.put("recordsTotal", configMap.size());
         maps.put("recordsFiltered", configMap.size());
         maps.put("data", machineRelateList);
-        System.err.println(machineRelateList);
         return new JSONObject(maps);
-//        return maps;
     }
 
 
@@ -110,8 +141,9 @@ public class DemoWebsocket {
      * 关闭时执行
      */
     @OnClose
-    public void onClose() {
-        logger.debug("连接：{} 关闭", this.userId);
+    public void onClose() throws IOException {
+        this.session.close();
+        logger.info("连接：{} 关闭", this.userId);
     }
 
     /**

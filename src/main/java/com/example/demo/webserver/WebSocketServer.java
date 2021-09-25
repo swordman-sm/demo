@@ -44,7 +44,7 @@ public class WebSocketServer {
     /**
      * 连接的uri
      */
-    private String  uri;
+    private String uri;
 
 
     /**
@@ -63,6 +63,7 @@ public class WebSocketServer {
         this.uri = session.getRequestURI().toString();
         WebSocketServer webSocketServer = webSocketServerMAP.get(uri);
         //同样业务的连接已经在线，则把原来的挤下线。
+        session.setMaxIdleTimeout(10 * 1000L);
         if (webSocketServer != null) {
             webSocketServer.session.getBasicRemote().sendText(uri + "重复连接被挤下线了");
             //关闭连接，触发关闭连接方法onClose()

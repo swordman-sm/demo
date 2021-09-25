@@ -92,8 +92,7 @@
                     <#-- login user -->
                     <li class="dropdown">
                         <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <#--                            欢迎 ${Request["XXL_JOB_LOGIN_IDENTITY"].username}-->
-                            欢迎管理员
+                            欢迎 ${Request["DTIMER_DAY_LOGIN_IDENTITY"].username}
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">

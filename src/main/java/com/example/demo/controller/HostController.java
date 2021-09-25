@@ -5,6 +5,7 @@ import cn.cjk.timerM.domain.TaskEntity;
 import com.example.demo.model.MachineRelateResponseVO;
 import com.example.demo.model.ReturnT;
 import com.example.demo.model.ThreadConstant;
+import com.example.demo.utils.DateUtil;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -47,16 +45,27 @@ public class HostController {
         Map<String, Long> runCountMap = runTaskMap.values().stream().collect(Collectors.
                 groupingBy(ts -> ts.getHost() + "_" + ts.getPort(), Collectors.counting()));
         Map<String, TaskEntity> queueTaskMap = hashOperations2.entries(ThreadConstant.TASK_QUEUE_KEY);
+        Map<String, Long> timeoutMap = runTaskMap.values().stream()
+                .filter(taskEntity -> {
+                    try {
+                        return DateUtil.getDistanceMinutes(taskEntity.getUpdateTime(), DateUtil.nowDateForStrYMDHMS()) > 10;
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }).collect(Collectors.
+                        groupingBy(ts -> ts.getHost() + "_" + ts.getPort(), Collectors.counting()));
         Map<String, Long> queueCountMap = queueTaskMap.values().stream().collect(Collectors.
                 groupingBy(ts -> ts.getHost() + "_" + ts.getPort(), Collectors.counting()));
 
+        TreeMap<String, MachineRelate> treeMap = new TreeMap<>(configMap);
         int id = 1;
-        for (Map.Entry<String, MachineRelate> entry : configMap.entrySet()) {
+        for (Map.Entry<String, MachineRelate> entry : treeMap.entrySet()) {
             MachineRelate machineRelate = entry.getValue();
             MachineRelateResponseVO machineRelateResponseVO = new MachineRelateResponseVO(machineRelate);
             machineRelateResponseVO.setId(id);
             machineRelateResponseVO.setRun(runCountMap.getOrDefault(entry.getKey(), 0L));
             machineRelateResponseVO.setQueue(queueCountMap.getOrDefault(entry.getKey(), 0L));
+            machineRelateResponseVO.setTimeout(timeoutMap.getOrDefault(entry.getKey(), 0L));
             machineRelateList.add(machineRelateResponseVO);
             id++;
         }

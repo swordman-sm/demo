@@ -2,79 +2,117 @@ $(function () {
 
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://localhost:9000/websocketTest/user000");
+        // websocket = new WebSocket("ws://localhost:9000/websocketTest/user000");
         console.log("link success")
+        console.log("base_url............   " + base_url)
     } else {
         alert('Not support websocket')
     }
 
-    //连接发生错误的回调方法
-    websocket.onerror = function () {
-        setMessageInnerHTML("error");
-    };
+    var websocket = null;
 
-    //连接成功建立的回调方法
-    websocket.onopen = function (event) {
-        setMessageInnerHTML("open");
-    }
-    //接收到消息的回调方法
-    websocket.onmessage = function (event) {
-        var json = $.parseJSON(event.data);
-        setTable(json)
-        // let va = $("h1").html();
-        // $("h1").html(event.data)
-        // console.log(va)
-        // setMessageInnerHTML(event.data);
-    }
-
-    //连接关闭的回调方法
-    websocket.onclose = function () {
-        setMessageInnerHTML("close");
+    function openWebSocket() {
+        // var url = document.getElementById('url').value.trim();
+        var url = "ws://" + window.location.host + "/websocketTest/user000";
+        //判断当前浏览器是否支持WebSocket
+        if ('WebSocket' in window) {
+            websocket = new WebSocket(url);
+        } else {
+            alert('当前浏览器 Not support websocket')
+        }
+        //连接发生错误的回调方法
+        websocket.onerror = function () {
+            // setMessageInnerHTML("WebSocket连接发生错误");
+        };
+        //连接成功建立的回调方法
+        websocket.onopen = function () {
+            // setMessageInnerHTML("WebSocket连接成功");
+        }
+        //接收到消息的回调方法
+        websocket.onmessage = function (event) {
+            var json = $.parseJSON(event.data);
+            setTable(json)
+            // setMessageInnerHTML(event.data);
+        }
+        //连接关闭的回调方法
+        websocket.onclose = function () {
+            websocket.close();
+            // setMessageInnerHTML("WebSocket连接关闭");
+        }
     }
 
     //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
     window.onbeforeunload = function () {
-        websocket.close();
+        closeWebSocket();
     }
 
-    //将消息显示在网页上
-    function setMessageInnerHTML(innerHTML) {
-        document.getElementById('message').innerHTML += innerHTML + '<br/>';
-    }
-
-    //关闭连接
+    //关闭WebSocket连接
     function closeWebSocket() {
+        console.log(websocket == null)
         websocket.close();
     }
 
-    //发送消息
-    function send() {
-        var message = document.getElementById('text').value;
-        websocket.send(message);
-    }
-
-    // $('input[name="my-checkbox"]').bootstrapSwitch({
-    //     "onColor": "primary",
-    //     "offColor": "default",
-    //     "onText": "",
-    //     "offText": "",
-    //     "size": "normal",
-    //     onSwitchChange: function (event, state) {
-    //         var t = null
-    //         if (state == true) {
-    //             t = window.setInterval(function () {
-    //                 jobTable.fnDraw(false)
-    //             }, 2000);
+    // //连接发生错误的回调方法
+    // websocket.onerror = function () {
+    //     setMessageInnerHTML("error");
+    // };
     //
-    //         } else {
-    //             window.clearInterval(t)
-    //             // setInterval(function () {
-    //             //     jobTable.fnDraw(false)
-    //             // }, 2000);
-    //             // jobTable.fnDraw(false)
-    //         }
-    //     }
-    // });
+    // //连接成功建立的回调方法
+    // websocket.onopen = function (event) {
+    //     setMessageInnerHTML("open");
+    // }
+    // //接收到消息的回调方法
+    // websocket.onmessage = function (event) {
+    //     var json = $.parseJSON(event.data);
+    //     setTable(json)
+    //     // let va = $("h1").html();
+    //     // $("h1").html(event.data)
+    //     // console.log(va)
+    //     // setMessageInnerHTML(event.data);
+    // }
+    //
+    // //连接关闭的回调方法
+    // websocket.onclose = function () {
+    //     setMessageInnerHTML("close");
+    // }
+    //
+    // //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    // window.onbeforeunload = function () {
+    //     websocket.close();
+    // }
+    //
+    // //将消息显示在网页上
+    // function setMessageInnerHTML(innerHTML) {
+    //     // document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    // }
+    //
+    // //关闭连接
+    // function closeWebSocket() {
+    //     websocket.close();
+    // }
+    //
+    // //发送消息
+    // function send() {
+    //     var message = document.getElementById('text').value;
+    //     websocket.send(message);
+    // }
+
+    $('input[name="my-checkbox"]').bootstrapSwitch({
+        "onColor": "primary",
+        "offColor": "default",
+        "size": "normal",
+        "animate": true,
+        onSwitchChange: function (event, state) {
+            var t = null
+            if (state == true) {
+                openWebSocket()
+                console.log("openwebsocket")
+            } else {
+                closeWebSocket()
+                console.log("closewebsocket")
+            }
+        }
+    });
 
     // init date tables
 
@@ -86,7 +124,7 @@ $(function () {
             // "deferRender": true,
             // "processing": true,
             // "serverSide": true,
-            // "searching": false,
+            "searching": false,
             // "ordering": false,
             "data": data.data,
             //"scrollX": true,	// scroll x，close self-adaption
@@ -171,6 +209,11 @@ $(function () {
                 },
                 {
                     "data": 'run',
+                    "visible": true,
+                    "width": '7%'
+                },
+                {
+                    "data": 'timeout',
                     "visible": true,
                     "width": '7%'
                 },
@@ -394,6 +437,15 @@ $(function () {
             },
             {
                 "data": 'run',
+                "visible": true,
+                "width": '7%',
+                'createdCell': function (td, cellData, rowData, row, col) {
+                    $(td).attr("style", "overflow:hidden;white-space:nowrap;text-overflow:ellipsis;")
+                    $(td).attr('title', cellData);
+                }
+            },
+            {
+                "data": 'timeout',
                 "visible": true,
                 "width": '7%',
                 'createdCell': function (td, cellData, rowData, row, col) {

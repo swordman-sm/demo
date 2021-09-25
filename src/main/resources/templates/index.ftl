@@ -9,6 +9,7 @@
     <title>Dtimer-Day调度中心</title>
 </head>
 <body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxljob_adminlte_settings"]?exists && "off" == cookieMap["xxljob_adminlte_settings"].value >sidebar-collapse</#if> ">
+
 <div class="wrapper">
     <!-- header -->
     <@netCommon.commonHeader />
@@ -17,6 +18,7 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>节点信息</h1>
@@ -24,11 +26,14 @@
 
         <!-- Main content -->
         <section class="content">
-<#--            <div class="row">-->
-<#--                <div class="col-xs-5">-->
-<#--                    <li>自动刷新 <input type="checkbox" name="my-checkbox" checked></li>-->
-<#--                </div>-->
-<#--            </div>-->
+            <div class="switch" style="float:right;">
+                <li>自动刷新 <input type="checkbox" name="my-checkbox"></li>
+            </div>
+            <#--            <div class="row">-->
+            <#--                <div class="col-xs-2">-->
+            <#--                    <li>自动刷新 <input type="checkbox" name="my-checkbox"></li>-->
+            <#--                </div>-->
+            <#--            </div>-->
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
@@ -52,6 +57,7 @@
                                     <th name="maxRetry">最大重试次数</th>
                                     <th name="queue">队列中</th>
                                     <th name="run">执行中</th>
+                                    <th name="timeout">超时中</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
