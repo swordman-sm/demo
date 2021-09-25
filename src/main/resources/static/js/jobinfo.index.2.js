@@ -5,6 +5,7 @@ $(function () {
         // websocket = new WebSocket("ws://localhost:9000/websocketTest/user000");
         console.log("link success")
         console.log("base_url............   " + base_url)
+        console.log($('#userid').html())
     } else {
         alert('Not support websocket')
     }

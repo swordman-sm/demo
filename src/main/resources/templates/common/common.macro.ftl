@@ -90,6 +90,7 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <#-- login user -->
+                    <a id="userid" style="visibility:hidden">${Request["DTIMER_DAY_LOGIN_IDENTITY"].id}</a>
                     <li class="dropdown">
                         <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             欢迎 ${Request["DTIMER_DAY_LOGIN_IDENTITY"].username}
