@@ -1,5 +1,10 @@
 package com.example.demo;
 
+import org.openjdk.jol.info.ClassLayout;
+import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -32,15 +37,41 @@ public class Test {
 //            }, 3, TimeUnit.SECONDS);
 //        }
 
-        AtomicReference<String> code = new AtomicReference<>("8888");
-        AtomicReference<String> check = new AtomicReference<>("8888");
+//        AtomicReference<String> code = new AtomicReference<>("8888");
+//        AtomicReference<String> check = new AtomicReference<>("8888");
+//
+//
+//        Test test = new Test();
+//        test.tt(code, check);
+//
+//        System.err.println(code);
+//        System.err.println(check);
 
+//        DeferredResult<String> deferredResult = new DeferredResult<>();
+//
+//        for (int i = 0; i < 10; i++) {
+//            CompletableFuture.supplyAsync(() -> {
+//                System.err.println("测试....." + new Random().nextInt());
+//                try {
+//                    TimeUnit.SECONDS.sleep(2);
+//                } catch (InterruptedException e) {
+//                }
+//                return "success";
+//            }).whenComplete((r, t) -> {
+//                if (t != null) {
+//                    deferredResult.setErrorResult(t);
+//                } else {
+//                    deferredResult.setResult(r);
+//                }
+//            });
+//            Object result = deferredResult.getResult();
+//
+//            System.err.println(result);
+//        }
 
-        Test test = new Test();
-        test.tt(code, check);
+        Object o = new Object();
+        System.err.println(ClassLayout.parseInstance(o).toPrintable());
 
-        System.err.println(code);
-        System.err.println(check);
 
     }
 

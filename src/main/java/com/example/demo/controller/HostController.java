@@ -6,6 +6,7 @@ import com.example.demo.model.MachineRelateResponseVO;
 import com.example.demo.model.ReturnT;
 import com.example.demo.model.ThreadConstant;
 import com.example.demo.utils.DateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -26,11 +27,13 @@ import java.util.stream.Collectors;
 @Controller
 @Component
 @RequestMapping("/hostinfo")
+@Slf4j
 public class HostController {
 
 
     @Resource
     private RedisTemplate<String, TaskEntity> redisTemplate;
+
 
     @PostMapping("/getConfig")
     @ResponseBody
@@ -72,7 +75,7 @@ public class HostController {
         maps.put("recordsTotal", configMap.size());
         maps.put("recordsFiltered", configMap.size());
         maps.put("data", machineRelateList);
-        System.err.println(machineRelateList);
+        log.error(machineRelateList.toString());
         return maps;
     }
 
